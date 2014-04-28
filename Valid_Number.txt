@@ -1,0 +1,28 @@
+Validate if a given string is numeric.
+
+Some examples:
+"0" => true
+" 0.1 " => true
+"abc" => false
+"1 a" => false
+"2e10" => true
+Note: It is intended for the problem statement to be ambiguous. You should gather all requirements up front before implementing one.
+
+
+
+Note:
+
+This function attempts to decompose string as follows:
+
+A (possibly empty) sequence of whitespace characters. Which characters are whitespace is determined by the isspace function (see Classification of Characters). These are discarded.
+
+An optional plus or minus sign (¡®+¡¯ or ¡®-¡¯).
+
+A floating point number in decimal. The decimal format is:
+
+***A nonempty sequence of digits optionally containing a decimal-point character¡ªnormally ¡®.¡¯, but it depends on the locale (see General Numeric).
+
+***An optional exponent part, consisting of a character ¡®e¡¯ or ¡®E¡¯, an optional sign, and a sequence of digits.
+
+
+Solution:
