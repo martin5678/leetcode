@@ -1,0 +1,52 @@
+Given numRows, generate the first numRows of Pascal's triangle.
+
+For example, given numRows = 5,
+Return
+
+[
+     [1],
+    [1,1],
+   [1,2,1],
+  [1,3,3,1],
+ [1,4,6,4,1]
+]
+
+
+--------------------------------------------
+If I use the original arraylist there will be a problem that all the element in rs is all same. So I just clone to cl every time.
+
+
+
+
+solution:
+public class Solution {
+    public ArrayList<ArrayList<Integer>> generate(int numRows) {
+        ArrayList<ArrayList<Integer>> rs = new ArrayList<ArrayList<Integer>>();
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+        ArrayList<Integer> cl = new ArrayList<Integer>();
+        if(numRows == 0) return rs;
+        temp.add(1);
+        cl = (ArrayList<Integer>) temp.clone();
+        rs.add(cl);
+        if(numRows == 1) return rs;
+        temp.add(1);
+        cl = (ArrayList<Integer>) temp.clone();
+        rs.add(cl);
+        if(numRows == 2) return rs;
+        for(int i = 2; i < numRows; i++){
+            int old = 1;
+            for(int j = 1; j <= i; j++){
+                int t = 0;
+                if(j == i) temp.add(1);
+                else{
+                    t += temp.get(j);
+                    temp.set(j, temp.get(j) + old);
+                    old = t;
+                } 
+            }
+            cl = (ArrayList<Integer>) temp.clone();
+            rs.add(cl);
+        }
+        return rs;
+    }
+}
