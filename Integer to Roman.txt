@@ -1,0 +1,74 @@
+Given an integer, convert it to a roman numeral.
+
+Input is guaranteed to be within the range from 1 to 3999.
+
+
+---------------------------------------------
+
+mysolution:
+
+public class Solution {
+    public String intToRoman(int num) {
+        return Transfer(num, "", 3, 3);
+    }
+    
+    public String Transfer(int num, String a, int i, int j){
+        if(num / 1000 != 0){
+            a += "M";
+            return Transfer(num - 1000, a, i, j);
+        }else if(num / 500 != 0){
+            a += "D";
+            return Transfer(num - 500, a, i, j);
+        }else if(num / 100 != 0 && i > 0){
+            a += "C";
+            i--;
+           return  Transfer(num - 100, a, i, j);
+        }else if(num / 50 != 0){
+            a += "L";
+            return Transfer(num - 50, a, i, j);
+        }else if(num / 10 != 0 && j > 0){
+            a += "X";
+            j--;
+            return Transfer(num - 10, a, i, j);
+        }else if(num / 5 != 0){
+            a += "V";
+            return Transfer(num - 5, a, i, j);
+        }else if(num / 1 == 4){
+            return a += "IV";
+        }else if(num / 1 != 0){
+            a += "I";
+            return Transfer(num - 1, a, i, j);
+        }
+        return a;
+    }
+}
+
+
+
+there is something confused like 9 should be IX but why not VIV. So the method cant pass.
+
+
+the condition can be 
+
+//"M","CM","D","CD","C","XC","L","XL","X","IX","V","IV","I"
+//1000,900,500,400,100,90,50,40,10,9,5,4,1
+
+solution from internet:
+
+public class Solution {
+    public String intToRoman(int num) {
+        String[] sdict = {"M", "CM", "D", "CD", 
+                          "C", "XC", "L", "XL", "X", 
+                          "IX", "V", "IV", "I"};
+        int[] idict = {1000, 900, 500, 400, 100,
+                        90, 50, 40, 10, 9, 5, 4, 1};
+        for(int i = 0; i < idict.length; i++){
+            if(num >= idict[i]){
+                return sdict[i] + intToRoman(num - idict[i]);
+            }
+        }
+        return "";
+    }
+}
+
+

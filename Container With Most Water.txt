@@ -1,0 +1,34 @@
+Given n non-negative integers a1, a2, ..., an, where each represents a point at coordinate (i, ai). n vertical lines are drawn such that the two endpoints of line i is at (i, ai) and (i, 0). Find two lines, which together with x-axis forms a container, such that the container contains the most water.
+
+Note: You may not slant the container.
+
+
+
+---------------------------------------
+
+
+solution:
+
+Two indexes left and right. The left index move to right and the right index move to left, only the height become higher the area is bigger.
+
+This idea is tricky, I learn it from Internet, but my code is much elegant and simple. lol
+
+
+
+public class Solution {
+    public int maxArea(int[] height) {
+        int n = height.length;
+        int i = 0, j = n - 1;
+        int ans = 0;
+        while(j > i){
+           if(height[i] > height[j]){
+               ans = ans > height[j] * (j - i) ? ans : height[j] * (j - i);
+               j--;
+           }else{
+               ans = ans > height[i] * (j - i) ? ans : height[i] * (j - i);
+               i++;
+           }
+        }
+        return ans;
+    }
+}

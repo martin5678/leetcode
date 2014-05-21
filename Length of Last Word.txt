@@ -1,0 +1,64 @@
+Given a string s consists of upper/lower-case alphabets and empty space characters ' ', return the length of last word in the string.
+
+If the last word does not exist, return 0.
+
+Note: A word is defined as a character sequence consists of non-space characters only.
+
+For example, 
+Given s = "Hello World",
+return 5.
+
+
+-----------------------------------------------------------
+
+The solution I have one month ago:
+
+public class Solution {
+    public int lengthOfLastWord(String s) {
+        if(s.trim().length()==0) return 0;
+        int n=s.length();
+        char[] b=new char[n];
+        b=s.toCharArray();
+        int indexspace=0;
+        int indexchar=0;
+        for(int i=0;i<n;i++){
+            if(b[i]==32) indexspace=i;
+            else indexchar=i;
+        }
+        if(indexspace==0) return s.trim().length();
+        if(indexspace==n-1){
+            int count=0;
+            while(indexchar>=0&&b[indexchar]!=32){
+                count++;
+                indexchar--;
+            }
+            return count;
+        }
+        else return n-indexspace-1;
+    }
+}
+
+
+
+The solution I redo this problem now: 
+
+The improvement is quite remarkable. Find the index of last character, and from that index find the length.
+
+
+public class Solution {
+    public int lengthOfLastWord(String s) {
+        if(s.trim().length() == 0) return 0;
+        int index = 0;
+        int len = 0;
+        for(int i = 0; i < s.length(); i++){
+            if(s.charAt(i) != ' '){
+                index = i;
+            }
+        }
+        while(index >= 0 && s.charAt(index) != ' '){
+            index--;
+            len++;
+        }
+        return len;
+    }
+}    

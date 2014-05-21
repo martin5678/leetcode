@@ -1,0 +1,27 @@
+Given an array of integers, every element appears twice except for one. Find that single one.
+
+Note:
+Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?
+
+
+-----------------------------------------
+
+This is a very tricky algorithm, we usually will use hashmap to solve this problem the time complexity will be O(n)  however the space complexity can be also O(n).
+
+Then we need a better algorithm. xor is a operator we rarely use but it works in this problem. For a Integer, the compilior will tranlate the Integer into a binary number for example   4^6  means 0100^0110=0010.
+
+so every number xor 0 will be itself and every number xor itself will be 0.
+
+
+solution:
+
+public class Solution {
+    public int singleNumber(int[] A) {
+        int single = 0;
+        for(int i : A) {
+            single ^= i;
+        }
+        return single;
+    }
+}
+
