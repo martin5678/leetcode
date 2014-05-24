@@ -1,0 +1,65 @@
+Given a binary tree, determine if it is height-balanced.
+
+For this problem, a height-balanced binary tree is defined as a binary tree in which the depth of the two subtrees of every node never differ by more than 1.
+
+------------------------------------------
+
+My solution: It takes two recursions. 
+
+
+
+/**
+ * Definition for binary tree
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+import java.lang.Math;
+public class Solution {
+    public boolean isBalanced(TreeNode root) {
+        if(root==null) return true;
+        if(Math.abs(maxDepth(root.right)-maxDepth(root.left))<=1) return isBalanced(root.left)&&isBalanced(root.right);
+        else return false;
+    }
+    public int maxDepth(TreeNode root) {
+        if(root==null) return 0;
+        if(root.left==null&&root.right==null) return 1;
+        else{
+            return max(maxDepth(root.left)+1,maxDepth(root.right)+1);
+        }
+    }
+    public int max(int a, int b){
+        return a>=b?a:b;
+    }
+
+}
+
+
+
+Another solution only takes one recursion: 
+
+
+public class Solution {
+public boolean isBalanced=true;
+
+public boolean isBalanced(TreeNode root) {
+    maxDepth(root);
+    return isBalanced;
+}
+
+public int maxDepth(TreeNode root) {
+   if(root==null)
+     return 0;
+   else{
+       int leftDepth=maxDepth(root.left)+1;
+       int rightDepth=maxDepth(root.right)+1;
+       if(Math.abs(leftDepth-rightDepth)>1)
+            isBalanced=false;
+       return leftDepth>rightDepth?(leftDepth):(rightDepth);
+   }
+}
+}
+

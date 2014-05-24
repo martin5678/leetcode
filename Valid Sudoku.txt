@@ -1,0 +1,74 @@
+Determine if a Sudoku is valid, according to: Sudoku Puzzles - The Rules.
+
+The Sudoku board could be partially filled, where empty cells are filled with the character '.'.
+
+
+Note:
+A valid Sudoku board (partially filled) is not necessarily solvable. Only the filled cells need to be validated.
+
+
+------------------------------
+
+
+solution:
+
+public class Solution { 
+    private boolean[] b = new boolean[10];
+    public void resetb(){
+       for(int i = 0; i < 10; i++){
+            b[i] = false;
+        } 
+    }
+    
+    public boolean isValidSudoku(char[][] board) {
+        resetb();
+        int l = board.length;
+        if(l == 0) return false;
+        int w = board[0].length;
+        if(l != w || l !=9 || w !=9) return false;
+        return CheckColum(board) && CheckMatrix(board) && CheckRow(board);
+    }
+    
+    public boolean CheckColum(char[][] board){
+        for(int i = 0; i < 9; i++){
+            resetb();
+            for(int j = 0; j < 9; j++){
+                if(board[i][j] != '.'){
+                   if(b[board[i][j] - '0'] == true) return false;
+                   else b[board[i][j] - '0'] = true;
+                }
+            }
+        }
+        return true;
+    }
+    
+    public boolean CheckRow(char[][] board){
+        for(int i = 0; i < 9; i++){
+            resetb();
+            for(int j = 0; j < 9; j++){
+                if(board[j][i] != '.'){
+                   if(b[board[j][i] - '0'] == true) return false;
+                   else b[board[j][i] - '0'] = true;
+                }
+            }
+        }
+        return true;
+    }
+    
+    public boolean CheckMatrix(char[][] board){
+        for(int i = 0; i < 9; i += 3){
+            for(int j = 0; j < 9; j += 3){
+                resetb();
+                for(int k = 0 ; k < 3; k++){
+                    for(int l = 0; l < 3; l++){
+                         if(board[i + k][j + l] != '.'){
+                            if(b[board[i + k][j + l] - '0'] == true) return false;
+                            else b[board[i + k][j + l] - '0'] = true;
+                    }
+                }
+            }
+        }
+    }
+    return true;
+    }
+}

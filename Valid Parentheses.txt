@@ -1,0 +1,38 @@
+
+Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+
+The brackets must close in the correct order, "()" and "()[]{}" are all valid but "(]" and "([)]" are not.
+
+
+
+-------------------------------------
+
+Note: (a[i] - sk.pop()  2) is based on the ascii code.
+
+
+Solution:
+
+
+import java.util.Stack;
+public class Solution {
+    public boolean isValid(String s) {
+        int n = s.length();
+        StackCharacter sk = new StackCharacter();
+        char[] a = s.toCharArray();
+        for(int i = 0; i  n; i++){
+            if(isLeft(a[i])){
+                sk.push(a[i]);
+            }
+            else{
+                if(sk.isEmpty()) return false;
+                else if(a[i] - sk.pop()  2) return false;
+            }
+        }
+        if(sk.isEmpty()) return true;
+        else return false;
+    }
+    public boolean isLeft(char a){
+        return a == '('  a == '{'  a == '[';
+    }
+  
+}
