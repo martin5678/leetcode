@@ -1,0 +1,33 @@
+Implement strStr().
+
+Returns a pointer to the first occurrence of needle in haystack, or null if needle is not part of haystack.
+
+-------------------------------------------------------
+
+Solution 1: Notice use needle.length() == 0  not needle = null; 
+
+public class Solution {
+    public String strStr(String haystack, String needle) {
+        if(needle.length() == 0) {
+            return haystack;
+        }
+        for(int i = 0; i < (haystack.length() - needle.length() + 1); i++) {
+            int j = 0;
+            int index = i;
+            while(j < needle.length()) {
+                if(haystack.charAt(index) != needle.charAt(j)) {
+                    break;
+                }
+                index++;
+                j++;
+                if(j == needle.length()) {
+                    return haystack.substring(i);
+                }
+            }
+        }
+        return null;
+    }
+}
+
+
+Solution 2: KMP

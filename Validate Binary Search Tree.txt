@@ -1,0 +1,56 @@
+Given a binary tree, determine if it is a valid binary search tree (BST).
+
+Assume a BST is defined as follows:
+
+The left subtree of a node contains only nodes with keys less than the node's key.
+The right subtree of a node contains only nodes with keys greater than the node's key.
+Both the left and right subtrees must also be binary search trees.
+
+-----------------------------------------------
+
+Solution 1 : Inorder of BST should in increasing order. O(n) extra space.
+
+public class Solution {
+    public boolean isValidBST(TreeNode root) {
+        ArrayList<Integer> rs = new ArrayList<Integer>();
+        inOrder(root, rs);
+        for (int i = 0; i < rs.size() - 1; i++) {
+            if (rs.get(i) >= rs.get(i + 1)) {
+                return false;
+            }
+        }
+        return true;
+        
+    }
+    public void inOrder(TreeNode root, ArrayList<Integer> a) {
+        if (root != null) {
+            inOrder(root.left, a);
+            a.add(root.val);
+            inOrder(root.right, a);
+        }
+    }
+    
+}
+
+Solution 2: 
+//对每个结点，判断其值是否在左右界中，并实时更新界，
+//比如遍历到根节点的左孩子结点，它的上界是根节点的值；遍历到根节点的右孩子结点，它的下界是根节点的值
+O(1) extra space.
+
+
+
+public class Solution {
+    public boolean isValidBST(TreeNode root) {
+        return judge(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    }
+    
+    public boolean judge(TreeNode root, int leftval, int rightval) {
+        if (root == null) {
+            return true;
+        }
+        return root.val > leftval && root.val < rightval
+               && judge(root.left, leftval, root.val)
+               && judge(root.right, root.val, rightval);
+    }
+        
+}

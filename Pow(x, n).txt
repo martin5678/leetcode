@@ -1,0 +1,49 @@
+Implement pow(x, n).
+
+--------------------
+
+Solution 1 non recursion:
+
+public class Solution {
+    public double pow(double x, int n) {
+        if (n == 0) {
+            return 1;
+        }
+        boolean positive = n < 0 ? false : true;
+        double answer = x;
+        double temp = 1.0;
+        long count = Math.abs((long)n);
+        while (count > 0) {
+            if (count == 1) {
+        		break;
+        	}
+            if (count % 2 != 0) {
+                temp *= answer;
+            }
+            answer *= answer;
+            count /= 2;
+        }
+        return positive == true? answer * temp : 1 / (answer * temp);
+    }
+}
+
+----------------------------
+solution 2 recursion:
+
+public class Solution {
+    public double pow(double x, int n) {
+        if (n == 0) {
+            return 1;
+        }
+        if (n == 1) {
+            return x;
+        }
+        boolean positive = true;
+        if (n < 0) {
+            positive = false;
+            n *= -1;
+        }
+        double answer =  n % 2 == 0 ? pow(x * x, n / 2) : pow(x * x, n / 2) * x;
+        return positive == true ? answer : 1 / answer;
+    }    
+}

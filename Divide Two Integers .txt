@@ -1,0 +1,53 @@
+Divide two integers without using multiplication, division and mod operator.
+
+----------------------------------------
+
+Solution 1 : 非常简单的减法，小数没问题，大树超时。
+
+
+ public int divide(int dividend, int divisor) {
+        if (divisor == 0) {
+            return Integer.MAX_VALUE;
+        }
+        boolean positive = false;
+        if ((dividend < 0 && divisor < 0) || (dividend > 0 && divisor > 0)) {
+            positive = true;
+        }
+        dividend = Math.abs(dividend);
+        divisor = Math.abs(divisor);
+        int answer = 0;
+        int remain = dividend;
+        while (remain >= divisor) {
+            remain = remain - divisor;
+            answer++;
+        }
+        return positive == false ? -answer : answer;
+    }
+
+
+Solution 2： 移位操作法。
+
+
+public class Solution {
+    public int divide(int dividend, int divisor) {
+        if (divisor == 0) {
+            return Integer.MAX_VALUE;
+        }
+        boolean positive = false;
+        if ((dividend < 0 && divisor < 0) || (dividend > 0 && divisor > 0)) {
+            positive = true;
+        }
+        long dend = Math.abs((long)dividend);
+        long dor = Math.abs((long)divisor); // MIN_VALUE use abs will overflow.
+        int answer = 0;
+        while (dend >= dor) {
+            int shift = 0;
+            while ((dor << shift) <= dend) {
+                shift++;
+            }
+            answer += 1 << (shift - 1);
+            dend -= dor << (shift - 1);
+        }
+        return positive == true ? answer : -answer;
+    }
+}

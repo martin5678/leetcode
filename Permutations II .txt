@@ -1,0 +1,74 @@
+Permutations II Total Accepted: 10113 Total Submissions: 41006 My Submissions
+Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+
+For example,
+[1,1,2] have the following unique permutations:
+[1,1,2], [1,2,1], and [2,1,1].
+
+
+------------------------------------------------
+
+Note: Just need to change a little from the I version, sort the array and make sure in solution 1 if a number is same as the one before it can only be used if the former number was used. For solution2, make sure the same number will not be swapped.
+
+Solution1 :
+
+public class Solution {
+    public List<List<Integer>> permuteUnique(int[] num) {
+        Arrays.sort(num);
+        List<List<Integer>> rs = new ArrayList<List<Integer>>();
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+        boolean[] isUsed = new boolean[num.length];
+        doPerm(num, rs, temp, isUsed);
+        return rs;
+    }
+    
+    public void doPerm(int[] num, List<List<Integer>> rs, ArrayList<Integer> temp, boolean[] isUsed) {
+        if(temp.size() == num.length) {
+            rs.add(new ArrayList<Integer>(temp));
+        }
+        for (int i = 0; i < num.length; i++) {
+            if (!isUsed[i]) {
+                if (i > 0 && num[i] == num[i - 1] && !isUsed[i - 1]) {
+                    continue;
+                }
+                isUsed[i] = true;
+                temp.add(num[i]);
+                doPerm(num, rs, temp, isUsed);
+                temp.remove(temp.size() - 1);
+                isUsed[i] = false;
+            }
+        }
+    }
+}
+
+
+
+Solution 2: 
+static ArrayList<int[]> ret = new ArrayList<int[]>();  
+      public void perm(int[] num, int i){  
+	        if( i == num.length){  
+	        	int[] a1 = num.clone();
+	            ret.add(a1);  
+	        }  
+	          
+	        for(int j = i; j < num.length; j++){  
+	            if(num[i] == num[j] && j > i) continue;
+	            swap(num ,i, j);  
+	            System.out.println(i +" " + j);
+	            perm(num, i + 1);  
+	            System.out.println("dadsad"+i +" " + j);
+	            swap(num, j, i);  
+	        }  
+	    }  
+	  
+	    public void swap(int a[], int i, int j) {
+	    	int temp = 0;
+	    	temp = a[i];
+	    	a[i] = a[j];
+	    	a[j] = temp;
+	    }
+	    public ArrayList<int[]> permute(int[] num) { 
+		Arrays.sort(num) ;
+	        perm(num, 0);  	          
+	        return ret;      
+	    }
