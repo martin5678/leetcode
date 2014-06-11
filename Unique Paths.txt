@@ -1,0 +1,38 @@
+A robot is located at the top-left corner of a m x n grid (marked 'Start' in the diagram below).
+
+The robot can only move either down or right at any point in time. The robot is trying to reach the bottom-right corner of the grid (marked 'Finish' in the diagram below).
+
+How many possible unique paths are there?
+
+
+Above is a 3 x 7 grid. How many possible unique paths are there?
+
+Note: m and n will be at most 100.
+
+-------------------------------------
+
+解法一： 要走到最底下必然往右走  n - 1步 往下走 m-1 一共走m+n-2. 按数学方法排列组合， C（m-1,m+n-2）编程序按公式算即可。
+
+解法二： 动态规划， 优化之后空间复杂度可以减少为O（n）
+
+公式 dp[i][j] = dp[i-1][j] +dp[i][j-1]
+
+
+public class Solution {
+    public int uniquePaths(int m, int n) {
+        if (m == 0 || n == 0) {
+            return 0;
+        }
+        int[] dp = new int[n + 1];
+        for (int i = 0; i < n + 1; i++) {
+            dp[i] = 0;
+        }
+        dp[0] = 1;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                dp[j + 1] = dp[j] + dp[j + 1];
+            }
+        }
+        return dp[n - 1];
+    }
+}

@@ -1,0 +1,48 @@
+Two elements of a binary search tree (BST) are swapped by mistake.
+
+Recover the tree without changing its structure.
+
+Note:
+A solution using O(n) space is pretty straight forward. Could you devise a constant space solution?
+
+-----------------------------------
+
+Note: The first solution will use the stack inside the program because of recursion. So the space complexity is O(n)
+
+
+public class Solution {
+    private TreeNode v1, v2, last;
+    public void recoverTree(TreeNode root) {
+        TreeNode n = root;
+        inorder(n);
+        int t = v1.val;
+        v1.val = v2.val;
+        v2.val = t;
+    }
+    public void inorder(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        inorder(root.left);
+        if (last != null) {
+            if (v1 == null) {
+                if(last.val > root.val) {
+                    v1 = last;
+                    v2 = root;
+                }
+            } else {
+                if(last.val > root.val) {
+                        v2 = root;
+                }
+               }
+        }
+        last = root;
+        inorder(root.right);
+    }
+}
+
+
+
+Solution 2 :Morris Traversal a inorder traversal with constant space complexity.
+
+

@@ -1,0 +1,37 @@
+Given inorder and postorder traversal of a tree, construct the binary tree.
+
+Note:
+You may assume that duplicates do not exist in the tree.
+
+-----------------------------------
+
+Note: 跟前序中序道理一样，只是后续遍历最后一个元素是根，根元素之前的是右子树。
+
+
+public class Solution {
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        if (inorder.length == 0) {
+            return null;
+        }
+        int len = inorder.length - 1;
+        return helper(inorder, 0, len, postorder, 0, len);
+    }
+    
+    public TreeNode helper(int[] inorder, int startin, int endin, int[] postorder,
+        int startpo, int endpo) {
+        if (startpo > endpo) {
+            return null;
+        }
+        TreeNode root = new TreeNode(postorder[endpo]);
+        int index;
+        for (index = startin; index < endin; index++) {
+            if (inorder[index] == postorder[endpo]) {
+                break;
+            }
+        }
+        int leftlen = index - startin;
+        root.left = helper(inorder, startin, index - 1, postorder, startpo, startpo + leftlen - 1);
+        root.right = helper(inorder, index + 1, endin, postorder, startpo + leftlen, endpo - 1);
+        return root;
+    }
+}

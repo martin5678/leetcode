@@ -1,0 +1,63 @@
+Given an array of non-negative integers, you are initially positioned at the first index of the array.
+
+Each element in the array represents your maximum jump length at that position.
+
+Determine if you are able to reach the last index.
+
+For example:
+A = [2,3,1,1,4], return true.
+
+A = [3,2,1,0,4], return false.
+
+-----------------------------
+
+Brute force 大数组超时。
+
+public class Solution {
+    public boolean canJump(int[] A) {
+        int n = A.length;
+        if (n == 0) {
+            return false;
+        }
+        if (n == 1) {
+            return true;
+        }
+        boolean[] dp = new boolean[n];
+        dp[0] = true;
+        for (int i = 0; i < n; i++) {
+            if (dp[i] == true) {
+                int index = A[i];
+                while (index > 0) {
+                    if (i + index < n) {
+                        dp[i + index] = true;
+                    }
+                    index--;
+                }
+            }
+            
+        }
+        return dp[n - 1];
+    }
+}
+
+技巧， 记录下第一个点能跳的最远距离， 然后计算这个点之后和最远距离点之间的点的最远距离并更新最远距离。
+
+
+public class Solution {
+    public boolean canJump(int[] A) {
+        if (A.length == 1) {
+            return true;
+        }
+        int farest = 0;
+        for (int i = 0; i < A.length - 1 && i <= farest; i++) {
+            if (i + A[i] > farest) {
+                farest = i + A[i];
+            }
+            if (farest >= A.length - 1 ) {
+                return true;
+            }
+        }
+        return false;
+    }    
+}
+

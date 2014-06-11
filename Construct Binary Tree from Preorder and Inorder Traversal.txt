@@ -1,0 +1,42 @@
+Given preorder and inorder traversal of a tree, construct the binary tree.
+
+Note:
+You may assume that duplicates do not exist in the tree.
+
+----------------------------------
+
+先序遍历的第一个元素为根节点，在中序遍历中找到这个根节点，从而可以将中序遍历分为左右两个部分，左边部分为左子树的中序遍历，右边部分为右子树的中序遍历，进而也可以将先序遍历除第一个元素以外的剩余部分分为两个部分，第一个部分为左子树的先序遍历，第二个部分为右子树的先序遍历。
+由上述分析结果，可以递归调用构建函数，根据左子树、右子树的先序、中序遍历重建左、右子树。
+
+
+Solution:
+
+
+public class Solution {
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        int len = preorder.length - 1;
+        if (preorder.length == 0) {
+            return null;
+        }
+        return helper(preorder, 0, len, inorder, 0, len);
+    }
+    
+    public TreeNode helper(int[] preorder, int spre, int epre, int[] inorder,
+        int sin, int ein) {
+            if (spre > epre) {
+                return null;
+            }
+            TreeNode root = new TreeNode(preorder[spre]);
+            int index;
+            for (index = sin; index <= ein; index++) {
+                if (preorder[spre] == inorder[index]) {
+                    break;
+                }
+            }
+            int leftlen = index - sin;
+            int rightlen = ein - index;
+            root.left = helper(preorder, spre + 1, spre + leftlen, inorder, sin, index - 1);
+            root.right = helper(preorder, epre - rightlen + 1, epre, inorder, index + 1, ein);
+            return root;
+        }
+}
