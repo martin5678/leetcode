@@ -1,0 +1,42 @@
+Given a linked list, return the node where the cycle begins. If there is no cycle, return null.
+
+Follow up:
+Can you solve it without using extra space?
+
+----------------------------
+
+Note: 
+
+It is a famous known problem Hare and Tortoise Length of head to cycle started node:x
+
+Length of the cycle: y
+
+Let hare run two steps while tortoise runs one step
+
+while both of them entered the cycle, the hare is definetly to overlap the tortoise at some node, we define it as m:
+
+The hare totally runs: x + ky + m The tortoise totally runs: x + ty + m Thus, ky = 2ty + x + m we have (x + m) mod y = 0 We can conclude that if the hare run more x steps, it will reach the cycle's starting node.
+
+
+public class Solution {
+    public ListNode detectCycle(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        ListNode onestep = head;
+        ListNode twostep = head;
+        do {
+            if (twostep.next == null || twostep.next.next == null) {
+                return null;
+            }
+            onestep = onestep.next;
+            twostep = twostep.next.next;
+        } while (onestep != twostep);
+        onestep = head;
+        while (onestep != twostep) {
+            onestep = onestep.next;
+            twostep = twostep.next;
+        }
+        return onestep;
+    }
+}

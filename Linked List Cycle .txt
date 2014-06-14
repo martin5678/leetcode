@@ -1,0 +1,26 @@
+Given a linked list, determine if it has a cycle in it.
+
+Follow up:
+Can you solve it without using extra space?
+
+-------------------------
+Note: two pointer, first go one step and second go two step. If there is a cycle they will meet.
+
+
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        if (head == null) {
+            return false;
+        }
+        ListNode onestep = head;
+        ListNode twostep = head;
+        do {
+            if (twostep.next == null || twostep.next.next == null) {
+                return false;
+            }
+            onestep = onestep.next;
+            twostep = twostep.next.next;
+        } while (onestep != twostep);
+        return true;
+    }
+}
