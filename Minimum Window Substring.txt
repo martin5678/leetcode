@@ -1,0 +1,73 @@
+Given a string S and a string T, find the minimum window in S which will contain all the characters in T in complexity O(n).
+
+For example,
+S = "ADOBECODEBANC"
+T = "ABC"
+Minimum window is "BANC".
+
+Note:
+If there is no such window in S that covers all characters in T, return the emtpy string "".
+
+If there are multiple such windows, you are guaranteed that there will always be only one unique minimum window in S.
+
+---------------------------------
+
+public class Solution {
+    public String minWindow(String S, String T) {
+        if (S == null || S.length() == 0) {
+            return S;
+        }
+        if (T == null || T.length() == 0) {
+            return "";
+        }        
+        HashMap<Character, Integer> window = new HashMap<Character, Integer>();
+        for (int i = 0; i < T.length(); i++) {
+            char c = T.charAt(i);
+            if (window.containsKey(c)) {
+                window.put(c, window.get(c) + 1);
+            } else {
+                window.put(c, 1);
+            }
+        }
+        String result = null;
+        int count = 0;
+        int left = 0;
+        HashMap<Character, Integer> current = new HashMap<Character, Integer>();
+        for (int i = 0; i < S.length(); i++) {
+            char c = S.charAt(i);
+            if(!window.containsKey(c)) {
+                continue;
+            }
+            if (!current.containsKey(c)) {
+                current.put(c, 1);
+            } else {
+                current.put(c, current.get(c) + 1);
+            }
+            if (current.get(c) <= window.get(c)) {
+                count++;
+            }
+            if (count == T.length()) {
+                while (left < S.length()) {
+                    char a = S.charAt(left);
+                    if (!window.containsKey(a)) {
+                        left++;
+                        continue;
+                    }
+                    if (current.get(a) > window.get(a)) {
+                        current.put(a, current.get(a) - 1);
+                        left++;
+                        continue;
+                    }
+                    break;
+                }
+                if (result == null || i - left + 1 < result.length()) {
+                    result = S.substring(left, i + 1);
+                }
+            }
+        }
+        if (result == null) {
+            return "";
+        }
+        return result;
+    }
+}

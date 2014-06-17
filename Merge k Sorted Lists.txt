@@ -1,0 +1,41 @@
+Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
+
+
+
+-----------------------------------------------
+
+利用栈也就是Java里面的PriorityQueue 作为数据结构，每次堆顶的都是最小的元素（最小堆）。
+
+poll和add操作复杂度O（logn）， 所以总时间复杂度为O（knlogk), 空间为O(k). 
+
+
+public class Solution {
+    private Comparator<ListNode> cmp= new Comparator<ListNode>() {
+        public int compare(ListNode l1, ListNode l2) {
+            return l1.val - l2.val;
+        }
+    };
+    
+    public ListNode mergeKLists(List<ListNode> lists) {
+        if (lists.size() == 0 || lists == null) {
+            return null;
+        }
+        Queue<ListNode> heap = new PriorityQueue<ListNode>(lists.size(), cmp);
+        ListNode dummy = new ListNode(0);
+        ListNode temp = dummy;
+        for (int i = 0; i < lists.size(); i++) {
+            if (lists.get(i) != null) {
+                heap.add(lists.get(i));
+            }
+        }
+        while (heap.size() > 0) {
+            ListNode head = heap.poll();
+            temp.next = head;
+            temp = temp.next;
+            if (head.next != null) {
+                heap.add(head.next);
+            }
+        }
+        return dummy.next;
+    }
+}

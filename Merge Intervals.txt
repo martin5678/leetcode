@@ -1,0 +1,45 @@
+Given a collection of intervals, merge all overlapping intervals.
+
+For example,
+Given [1,3],[2,6],[8,10],[15,18],
+return [1,6],[8,10],[15,18].
+
+
+-------------------------------
+
+Notice :
+
+先要以start 排序整个intervals 然后从头往后合并。
+
+public class Solution {
+    public List<Interval> merge(List<Interval> intervals) {
+        if (intervals.size() == 0 || intervals.size() == 1) {
+            return intervals;
+        }
+        Collections.sort(intervals, cmp);
+        int i = 1;
+        while (i < intervals.size()) {
+            if (intervals.get(i - 1).end >= intervals.get(i).start) {
+                Interval newInt = mergeTwo(intervals.get(i), intervals.get(i - 1));
+                intervals.remove(i - 1);
+                intervals.remove(i - 1);
+                intervals.add(i - 1, newInt);
+            } else {
+                i++;
+            }
+        }
+        return intervals;
+    }
+    
+    private Interval mergeTwo(Interval a, Interval b) {
+        int big = a.end > b.end ? a.end : b.end;
+        int small = a.start < b.start ? a.start : b.start;
+        return new Interval(small, big);
+    }
+    
+    private Comparator<Interval> cmp = new Comparator<Interval>() {
+        public int compare(Interval a, Interval b) {
+            return a.start - b.start;
+        }
+    };
+}
