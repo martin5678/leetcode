@@ -25,4 +25,56 @@ A floating point number in decimal. The decimal format is:
 ***An optional exponent part, consisting of a character ‘e’ or ‘E’, an optional sign, and a sequence of digits.
 
 
+   	1. 只能包含数字、小数点、正负号、E|e，头尾能包含空格
+        2. e的前后必须有数字
+        3. e的前面可以是小数	，后面必须是整数
+        4. e的前后都可以有正负号
+        5. 小数点两边至少有一边是数字
+
+---------------------------------------
+1,第一个符号必须是 + - . 数字，否则false. 按第一个符号判断后面的情况。
+注意的东西 ：1， 读入一个e之后要把number置为false
+	     2， 最后return的是number。
+
 Solution:
+
+
+public class Solution {
+    public boolean isNumber(String s) {
+        s = s.trim();
+        if (s.length() == 0) {
+            return false;
+        }
+        int i = 0;
+        if (s.charAt(i) == '+' || s.charAt(i) == '-') {
+            i++;
+        }
+        boolean number = false;
+        boolean dot = false;
+        boolean exp = false;
+        while (i < s.length()) {
+            if (s.charAt(i) >= '0' && s.charAt(i) <= '9') {
+                number = true;
+            } else if (s.charAt(i) == '.') {
+                if (exp == true || dot == true) {
+                    return false;
+                }
+                dot = true;
+            } else if (s.charAt(i) == 'e' || s.charAt(i) == 'E') {
+                if (exp == true || number == false) {
+                    return false;
+                }
+                exp = true;
+                number = false;
+            } else if (s.charAt(i) == '+' || s.charAt(i) == '-') {
+                if (s.charAt(i - 1) != 'e' && s.charAt(i - 1) != 'E') {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+            i++;
+        }
+        return number;
+    }
+}

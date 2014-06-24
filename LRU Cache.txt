@@ -1,0 +1,73 @@
+Design and implement a data structure for Least Recently Used (LRU) cache. It should support the following operations: get and set.
+
+get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.
+set(key, value) - Set or insert the value if the key is not already present. When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item.
+
+
+------------------------------
+
+第一个想法是用hashmap来存映射关系，用linkedlist来存优先级。 这样做可行，但是因为单向链表的删除操作是O（n） 所以大集合超时了。 这样只能自己做一个双向链表来存优先级，这样才可以达到 插入和删除节点都是O（1）。
+
+
+public class LRUCache {
+    class Node {
+        Node pre;
+        Node next;
+        int value;
+        int key;
+        public Node(int k, int v) {
+            this.key = k;
+            this.value = v;
+        }
+    }
+    private HashMap<Integer, Node> hm;
+    private int maxSize;
+    private Node head = new Node(-1, -1);
+    private Node tail = new Node(-1, -1);
+    public LRUCache(int capacity) {
+        this.hm = new HashMap<Integer, Node>();
+        this.maxSize = capacity; 
+        head.next = tail;
+        tail.pre = head;
+    }
+    
+    public int get(int key) {
+        if (!hm.containsKey(key)) {
+            return -1;
+        }
+        Node n = hm.get(key);
+        deleteNode(n);
+        moveNode(n);
+        return hm.get(key).value;
+    }
+    
+    public void set(int key, int value) {
+        if (hm.containsKey(key)) {
+            hm.get(key).value = value;
+            Node n = hm.get(key);
+            deleteNode(n);
+            moveNode(n);
+            return;
+        }
+        if (hm.size() == maxSize) {
+            hm.remove(head.next.key);
+            Node n = head.next;
+            deleteNode(n);
+        }
+        Node t = new Node(key, value);
+        hm.put(key, t);
+        moveNode(t);
+    }
+    
+    private void deleteNode(Node n) {
+        n.pre.next = n.next;
+        n.next.pre = n.pre;
+    }
+    
+    private void moveNode(Node n) {
+        n.next = tail;
+        n.pre = tail.pre;
+        tail.pre.next = n;
+        tail.pre = n;
+    }
+}

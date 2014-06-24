@@ -1,0 +1,40 @@
+Given a string S, find the longest palindromic substring in S. You may assume that the maximum length of S is 1000, and there exists one unique longest palindromic substring.
+
+-------------------------------------
+
+这题用DP做需要O（n^2）时间 O（n^2）空间，但是用中间向两边发散法是O（n^2）时间 O（1）空间，还有一种O（n）和O（n）的算法比较复杂就不用了。对每一个字符为中心向两边发散找到以这个字符为中心的最长回文，注意中心有2n - 1种，因为一个字符为中心 以及2个字符为中心。
+
+
+public class Solution {
+    public String longestPalindrome(String s) {
+        if (s.length() == 0) {
+            return "";
+        }
+        String result = s.substring(0, 1);
+        for (int i = 0; i < s.length() - 1; i++) {
+            String rs1 = longestP(s, i, i);
+            if (rs1.length() > result.length()) {
+                result = rs1;
+            }
+            String rs2 = longestP(s, i, i + 1);
+            if (rs2.length() > result.length()) {
+                result = rs2;
+            }
+        }
+        return result;
+    }
+    
+    private String longestP(String s, int i, int j) {
+        int left = i;
+        int right = j;
+        while (left >= 0 && right <= s.length() - 1
+            && s.charAt(left) == s.charAt(right)) {
+            left--;
+            right++;
+        }
+        if (i == j - 1 && s.charAt(i) != s.charAt(j)) {
+            return s.substring(i, i + 1);
+        }
+        return s.substring(left + 1, right);
+    }
+}

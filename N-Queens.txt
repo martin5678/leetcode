@@ -1,0 +1,93 @@
+The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other.
+
+
+
+Given an integer n, return all distinct solutions to the n-queens puzzle.
+
+Each solution contains a distinct board configuration of the n-queens' placement, where 'Q' and '.' both indicate a queen and an empty space respectively.
+
+For example,
+There exist two distinct solutions to the 4-queens puzzle:
+
+[
+ [".Q..",  // Solution 1
+  "...Q",
+  "Q...",
+  "..Q."],
+
+ ["..Q.",  // Solution 2
+  "Q...",
+  "...Q",
+  ".Q.."]
+]
+
+
+-------------------------------------------------
+
+写这个跟写LRU一样头昏好么，写着写着就晕了 要做到2次以内无BUG好难啊。 解题思路就是全排列方式的搜索，递归跳出条件是用来存储皇后位置的arraylist size = n. 这里用一个arraylist可以把空间复杂度降低为O（n）， arraylist的坐标代表皇后在第几行，值代表在第几列。
+
+
+检查一个输入是否valid时候就是检查同一列是否已经有皇后 或者 两个对角线已经有皇后。
+
+public class Solution {
+    public List<String[]> solveNQueens(int n) {
+        List<String[]> rs = new ArrayList<String[]>();
+        if (n <= 0) {
+            return rs;
+        }
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+        helper(n, rs, temp);
+        return rs;
+    }
+    
+    private void helper(int n, List<String[]> rs, ArrayList<Integer> temp) {
+        if (temp.size() == n) {
+            rs.add(draw(temp));
+            return;
+        }
+        for (int i = 0; i < n; i++) {
+            if (!isValid(temp, i)) {
+                continue;
+            }
+            temp.add(i);
+            helper(n, rs, temp);
+            temp.remove(temp.size() - 1);
+        }
+    }
+    
+    private boolean isValid(ArrayList<Integer> temp, int col) {
+        int row = temp.size();
+        for (int i = 0; i < row; i++) {
+            // check same col
+            if (temp.get(i) == col) {
+                return false;
+            }
+            // check left top to right bottom
+            if (i - temp.get(i) == row - col) {
+                return false;
+            }
+            // check right top to left bottom            
+            if (i + temp.get(i) == row + col) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private String[] draw(ArrayList<Integer> temp) {
+        int n = temp.size();
+        String[] result = new String[n];
+        for (int i = 0; i < n; i++) {
+            String t = "";
+            for (int j = 0; j < n; j++) {
+                if (temp.get(i) == j) {
+                    t += 'Q';
+                } else {
+                    t += '.';
+                }
+            }
+            result[i] = t;
+        }
+        return result;
+    }
+}

@@ -1,0 +1,56 @@
+Given a string containing only digits, restore it by returning all possible valid IP address combinations.
+
+For example:
+Given "25525511135",
+
+return ["255.255.11.135", "255.255.111.35"]. (Order does not matter)
+
+-------------------------------------------------
+
+subsets的变形，注意跳出条件。
+
+
+public class Solution {
+    public List<String> restoreIpAddresses(String s) {
+        List<String> rs = new ArrayList<String>();
+        int len = s.length();
+        if (len > 12 || len < 4) {
+            return rs;
+        }
+        ArrayList<String> temp = new ArrayList<String>();
+        helper(rs, temp, 0, s);
+        return rs;
+    }
+    
+    private void helper(List<String> rs, ArrayList<String> temp, 
+        int pos, String s) {
+        if (temp.size() == 4) {
+            if (pos != s.length()) {
+                return;
+            }
+            StringBuilder sb = new StringBuilder();
+            for (String i : temp) {
+                sb.append(i).append(".");
+            }
+            sb.deleteCharAt(sb.length() - 1);
+            rs.add(sb.toString());
+            return;
+        }
+        for (int i = pos; i < s.length() && i <= pos + 3; i++) {
+            String t = s.substring(pos, i + 1);
+            if (isValid(t)) {
+                temp.add(t);
+                helper(rs, temp, i + 1, s);
+                temp.remove(temp.size() - 1);
+            }
+        }
+    }
+    
+    private boolean isValid(String s) {
+        int a = Integer.parseInt(s);
+        if (s.charAt(0) == '0') {
+            return s.equals("0");
+        }
+        return a >= 0 && a <= 255;
+    }
+}

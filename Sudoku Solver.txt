@@ -1,0 +1,70 @@
+Write a program to solve a Sudoku puzzle by filling the empty cells.
+
+Empty cells are indicated by the character '.'.
+
+You may assume that there will be only one unique solution.
+
+
+---------------------------------------
+
+建立在valid sudoku基础上，对每一个空格枚举所有可能，如果valid就继续枚举以后的每一格，递归写法。
+
+public class Solution {
+    public void solveSudoku(char[][] board) {
+        helper(board);
+    }
+    
+    private boolean helper(char[][] board) {
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (board[i][j] != '.') {
+                    continue;
+                }
+                for (int k = 1; k <= 9; k++) {
+                    board[i][j] = (char) (k + '0');
+                    if (isValid(board, i, j) && helper(board)) {
+                        return true;
+                    }
+                    board[i][j] = '.';
+                }
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private boolean isValid(char[][] board, int row, int col) {
+        //check row
+        for (int i = 0; i < 9; i++) {
+            if (i == col) {
+                continue;
+            }
+            if (board[row][i] == board[row][col]) {
+                return false;
+            }
+        }
+        //check col
+        for (int j = 0; j < 9; j++) {
+            if (j == row) {
+                continue;
+            }
+            if (board[j][col] == board[row][col]) {
+                return false;
+            }
+        }
+        //check matrix
+        int rownumber = row / 3 * 3;
+        int colnumber = col / 3 * 3;
+        for (int i = rownumber; i < rownumber + 3; i++) {
+            for (int j = colnumber; j < colnumber + 3; j++) {
+                if (i == row && j == col) {
+                    continue;
+                }
+                if (board[i][j] == board[row][col]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}

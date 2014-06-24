@@ -1,0 +1,66 @@
+Given a binary tree containing digits from 0-9 only, each root-to-leaf path could represent a number.
+
+An example is the root-to-leaf path 1->2->3 which represents the number 123.
+
+Find the total sum of all root-to-leaf numbers.
+
+For example,
+
+    1
+   / \
+  2   3
+The root-to-leaf path 1->2 represents the number 12.
+The root-to-leaf path 1->3 represents the number 13.
+
+Return the sum = 12 + 13 = 25.
+
+---------------------------------
+
+Solution 1 我自己想的，但是函数几个值传递和引用传递还是搞混了，所以用整数来传递值失败了，所以用了个arraylist来记录所有sum然后加一起。这样会怎么加O（n）的辅助空间 n = 所有叶子节点和。以及部分arraylist的操作开销。
+
+public class Solution {
+    public int sumNumbers(TreeNode root) {
+        int sum = 0;
+        ArrayList<Integer> rs = new ArrayList<Integer>();
+        helper(root, 0, rs);
+        for (int i : rs) {
+            sum += i;
+        }
+        return sum;
+    }
+    
+    private void helper(TreeNode root, int tsum, ArrayList<Integer> rs) {
+        if (root == null) {
+            return;
+        }
+        if (root.left == null && root.right == null) {
+            tsum = tsum * 10 + root.val;
+            rs.add(tsum);
+            return;
+        }
+        tsum = tsum * 10 + root.val;
+        helper(root.left, tsum, rs);
+        helper(root.right, tsum, rs);
+    }
+}
+
+
+
+Solution 2 其实也可以不用辅助空间（系统内部递归栈除外）。
+
+public class Solution {
+    public int sumNumbers(TreeNode root) {
+        return helper(root, 0);
+    }
+    
+    private int helper(TreeNode root, int tsum) {
+        if (root == null) {
+            return 0;
+        }
+        tsum = tsum * 10 + root.val;        
+        if (root.left == null && root.right == null) {
+            return tsum;
+        }
+        return helper(root.left, tsum) + helper(root.right, tsum);
+    }
+}

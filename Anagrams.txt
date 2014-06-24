@@ -1,0 +1,44 @@
+Given an array of strings, return all groups of strings that are anagrams.
+
+Note: All inputs will be in lower-case.
+
+-----------------------------------------
+
+方法挺简单就是建立一个int数组来记录一个字符在一个string里面出现的次数 然后对比int[]数组是否相等就好。 不过这里有几个注意点和小技巧。 int数组可以只设为26而不是256， 然后数组这样的Object类型没法直接用来做key首先要写一个函数把它的hash值转换为基本数据类型。 然后就是要存arraylist作为value，因为如果直接把string用来做value最后会少加一次anagrams进rs。用arraylist存只要size大于1 就可以addall.
+
+
+public class Solution {
+    public List<String> anagrams(String[] strs) {
+        List<String> rs = new ArrayList<String>();
+        if (strs.length < 2) {
+            return rs;
+        }
+        HashMap<String, ArrayList<String>> hm = new HashMap<String, ArrayList<String>>();
+        for (String i : strs) {
+            int len = i.length();
+            int[] temp = new int[26];
+            for (int j = 0; j < len; j++) {
+                temp[i.charAt(j) - 'a']++;
+            }
+            String t = getString(temp);
+            if (!hm.containsKey(t)) {
+                hm.put(t, new ArrayList<String>());
+            }
+            hm.get(t).add(i);
+        }
+        for (ArrayList<String> i : hm.values()) {
+            if (i.size() > 1) {
+                rs.addAll(i);
+            }
+        }
+        return rs;
+    }
+    
+    private String getString(int[] a) {
+        StringBuilder sb = new StringBuilder();
+        for (int i : a) {
+            sb.append(i);
+        }
+        return sb.toString();
+    }
+}
