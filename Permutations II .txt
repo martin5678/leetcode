@@ -54,9 +54,7 @@ static ArrayList<int[]> ret = new ArrayList<int[]>();
 	        for(int j = i; j < num.length; j++){  
 	            if(num[i] == num[j] && j > i) continue;
 	            swap(num ,i, j);  
-	            System.out.println(i +" " + j);
 	            perm(num, i + 1);  
-	            System.out.println("dadsad"+i +" " + j);
 	            swap(num, j, i);  
 	        }  
 	    }  

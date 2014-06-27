@@ -1,0 +1,50 @@
+Given a binary tree, return the postorder traversal of its nodes' values.
+
+For example:
+Given binary tree {1,#,2,3},
+   1
+    \
+     2
+    /
+   3
+return [3,2,1].
+
+Note: Recursive solution is trivial, could you do it iteratively?
+
+-------------------------------
+
+递归就不写了， 太简单了。非递归的思路：
+
+     * 除了最左的一个左子结点，把所有的左子结点相继入栈（是一个循环过程） 
+     * 这时p指向最左的那个左子结点， 
+     * 重复：若p没有右子结点（或者p的右子结点已经输出），则输出p，同时出栈，将值赋给p 
+     * 若p有右子结点，则将p入栈，同时p指向其右子结点 
+     * 重复以上步骤，直到p为空 
+
+
+public class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> rs = new ArrayList<Integer>();
+        Stack<TreeNode> st = new Stack<TreeNode>();
+        TreeNode p = root;
+        TreeNode pre = null;
+        while (p != null) {
+            while (p.left != null) {
+                st.push(p);
+                p = p.left;
+            }
+            while (p.right == null || p.right == pre) {
+                rs.add(p.val);                
+                pre = p;
+                if (st.empty()) {
+                    return rs;
+                }
+                p = st.pop();
+            }
+            st.push(p);
+            p = p.right;
+        }
+        return rs;
+    }
+}
+

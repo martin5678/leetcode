@@ -1,0 +1,59 @@
+Given a matrix of m x n elements (m rows, n columns), return all elements of the matrix in spiral order.
+
+For example,
+Given the following matrix:
+
+[
+ [ 1, 2, 3 ],
+ [ 4, 5, 6 ],
+ [ 7, 8, 9 ]
+]
+You should return [1,2,3,6,9,8,7,4,5].
+
+------------------------------------
+刚开始拿递归写，但是发现各种情况需要考虑，还是用直接循环来写吧。这个题目算法和逻辑都不难，就是下标处理需要非常细心。
+
+一层一层剥皮。
+
+public class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> rs = new ArrayList<Integer>(); 
+        int row = matrix.length;
+        if (row == 0) {
+            return rs;
+        }
+        int col = matrix[0].length;
+        int min = Math.min(row, col);
+        int level = 0;
+        while (level < (min + 1) / 2) {
+            int offset = level;
+            int startrow = offset;
+            int startcol = offset;
+            int collength = col - offset * 2;
+            int rowlength = row - offset * 2;
+            // add top
+            for (int i = 0; i < collength; i++) {
+                rs.add(matrix[startrow][startcol + i]);
+            }
+            // add right
+            for (int i = 0; i < rowlength - 1; i++) {
+                rs.add(matrix[startrow + 1 + i][startcol + collength - 1]);
+            }
+            // In case only have one col or row
+            if (collength == 1 || rowlength == 1) {
+                break;
+            }
+            // add bottom
+            for (int i = 0; i < collength - 1; i++) {
+                rs.add(matrix[startrow + rowlength - 1][startcol + collength - 2 - i]);
+            }
+            // add left
+            for (int i = 0; i < rowlength - 2; i++) {
+                rs.add(matrix[startrow + rowlength - 2 - i][startcol]);
+            }
+            level++;
+        }
+        return rs;
+    }
+}
+

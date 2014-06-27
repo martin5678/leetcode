@@ -1,0 +1,57 @@
+Given a 2D binary matrix filled with 0's and 1's, find the largest rectangle containing all ones and return its area.
+
+--------------------------------------------------
+
+这一题乍一看完全没思路，暴力法明显不行。
+
+但是如果把这个题和Largest Rectangle in Histogram 联系一起就有思路了。 这个题目是DP和那个题目的结合。
+
+This question is similar as [Largest Rectangle in Histogram]:
+
+You can maintain a row length of Integer array H recorded its height of '1's, and scan and update row by row to find out the largest rectangle of each row.
+
+For each row, if matrix[row][i] == '1'. H[i] +=1, or reset the H[i] to zero. and accroding the algorithm of [Largest Rectangle in Histogram], to update the maximum area.
+
+
+子程序完全就是跟Largest Rectangle in Histogram 一模一样的。
+
+public class Solution {
+    public int maximalRectangle(char[][] matrix) {
+        int row = matrix.length;
+        if (row == 0 || matrix == null) {
+            return 0;
+        }
+        int col = matrix[0].length;
+        int maxarea = 0;
+        int[] height = new int[col];
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (matrix[i][j] == '0') {
+                    height[j] = 0;
+                } else {
+                    height[j] += 1;
+                }
+            }
+            maxarea = Math.max(maxarea, largestRectangleArea(height));
+        }
+        return maxarea;
+    }
+    
+    private int largestRectangleArea(int[] height) {
+        if (height.length == 0 || height == null) {
+            return 0;
+        }
+        Stack<Integer> st = new Stack<Integer>();
+        int max = 0;
+        for (int i = 0; i <= height.length; i++) {
+            int cur = i == height.length ? - 1 : height[i];
+            while (st.size() > 0 && cur <= height[st.peek()]) {
+                int h = height[st.pop()];
+                int w = st.size() > 0 ? i - st.peek() - 1 : i;
+                max = Math.max(max, h * w);
+            }
+            st.push(i);
+        }
+        return max;
+    }
+}

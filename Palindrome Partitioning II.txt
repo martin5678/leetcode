@@ -1,0 +1,73 @@
+Given a string s, partition s such that every substring of the partition is a palindrome.
+
+Return the minimum cuts needed for a palindrome partitioning of s.
+
+For example, given s = "aab",
+Return 1 since the palindrome partitioning ["aa","b"] could be produced using 1 cut.
+
+-----------------------------------
+
+
+先建一个二维DP数组来存i to j 是否为回文，这里用到第一个dp ， 注意点是 i和j 要从同一个点开始走， i向前j向后不这么做会导致判断的时候中间值还没计算。
+
+那么判断matrix[i][j] 是否满足回文字符串的条件是： 
+
+
+
+matrix[i+1][j-1] == true (表示sub(i+1,j-1)是满足回文字符串) && str[i] == str[j] 
+
+或者 
+
+j - i < 2 && str[i] == str[j] （即如果j - i == 1时，为两个字符相等，如果j - i == 0时，为同一个字符） 
+
+第2个DP 用cut来记录。 cut[i] 表示从 0 到 i 所需要的最小cut数， cut[0] = 0. cut[i] = min(cut[j] + 1) for j <i and j >= 0. 之前先做一个判断要是matrix[0][i] = true cut[i] = 0.
+
+public class Solution {
+    public int minCut(String s) {
+        int n = s.length();
+        if (n <= 1) {
+            return 0;
+        }
+        boolean[][] palindrome = new boolean[n][n];
+        Palindrome(palindrome, s);
+        int[] cut = new int[n];
+        Arrays.fill(cut, n - 1);
+        cut[0] = 0;
+        for (int i = 1; i < n; i++) {
+            if (palindrome[0][i] == true) {
+                cut[i] = 0;
+                continue;
+            }
+            for (int j = i - 1; j >= 0; j--) {
+                if (palindrome[j + 1][i] == true) {
+                    cut[i] = Math.min(cut[i], cut[j] + 1);
+                }
+            }
+        }
+        return cut[n - 1];
+    }
+    
+    private void Palindrome(boolean[][] palindrome, String s) {
+        int len = palindrome.length;
+        palindrome[0][0] = true;
+        palindrome[len - 1][len - 1] = true;
+        for (int i = 0; i < s.length(); i++) {
+            palindrome[i][i] = true;
+        }
+        for (int i = 0; i < s.length() - 1; i++) {
+            palindrome[i][i + 1] = (s.charAt(i) == s.charAt(i + 1));
+        }
+        for (int i = len - 1; i >= 0; i--) {
+            for (int j = i; j < len; j++) {
+                if (j == 0 || i == len - 1) {
+                    continue;
+                }
+                if (j - i < 2 || palindrome[i + 1][j - 1] == true) {
+                    if (s.charAt(i) == s.charAt(j)) {
+                        palindrome[i][j] = true;
+                    }
+                }
+            }
+        }
+    }
+}

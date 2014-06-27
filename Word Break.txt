@@ -1,3 +1,14 @@
+Given a string s and a dictionary of words dict, determine if s can be segmented into a space-separated sequence of one or more dictionary words.
+
+For example, given
+s = "leetcode",
+dict = ["leet", "code"].
+
+Return true because "leetcode" can be segmented as "leet code".
+
+
+---------------------------------------
+
 一个DP问题。定义possible[i] 为S字符串上[0,i]的子串是否可以被segmented by dictionary.
 
 那么
@@ -10,7 +21,7 @@ possible[i] = true      if  S[0,i]在dictionary里面
 
  
 
----------------------------------------
+
 
 public class Solution {
     public boolean wordBreak(String s, Set<String> dict) {

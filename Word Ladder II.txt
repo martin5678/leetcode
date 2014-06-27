@@ -1,0 +1,150 @@
+Given two words (start and end), and a dictionary, find all shortest transformation sequence(s) from start to end, such that:
+
+Only one letter can be changed at a time
+Each intermediate word must exist in the dictionary
+For example,
+
+Given:
+start = "hit"
+end = "cog"
+dict = ["hot","dot","dog","lot","log"]
+Return
+  
+    ["hit","hot","dot","dog","cog"],
+    ["hit","hot","lot","log","cog"]
+  ]
+Note:
+All words have the same length.
+All words contain only lowercase alphabetic characters.
+
+-----------------------------------
+
+这题刚开始想用DFS 然后每读入一个结果更新最小值，这样去剪枝。但是还是TLE了，毕竟DFS时间代价太高。 后来想了一下这个可以和第一题一样用BFS， 因为只要找到第一个最小值，后面只要搜索完成当前的一层就可以了。时间复杂度直接降低。
+
+DFS代码 小集合通过 大集合超时了。
+
+
+public class Solution {
+    public List<List<String>> findLadders(String start, String end, Set<String> dict) {
+        List<List<String>> rs = new ArrayList<List<String>>();
+        ArrayList<String> temp = new ArrayList<String>();
+        int minsize = dict.size() + 2;
+        int min = dict.size() + 2;
+        if (start.length() == 0 || dict.size() == 0) {
+            return rs;
+        }
+        temp.add(start);
+        dict.remove(start);
+        helper(rs, temp, end, start, dict, minsize);
+        for (List<String> a : rs) {
+            min = Math.min(min, a.size());
+        }
+        List<List<String>> ff = new ArrayList<List<String>>();
+        for (List<String> a : rs) {
+            if (a.size() == min) {
+                ff.add(a);
+            }
+        }
+        return ff;
+    }
+    
+    private void helper(List<List<String>> rs, ArrayList<String> temp,
+        String end, String start, Set<String> dict, int minsize) {
+        if (temp.size() != 0 && isLast(start, end)) {
+            if (temp.size() + 1 < minsize) {
+                minsize = temp.size() + 1;
+                temp.add(end);
+                rs.add(new ArrayList<String>(temp));
+                temp.remove(temp.size() - 1);
+            }
+            return;
+        }  
+        for (int i = 0; i < start.length(); i++) {
+            for (int j = 0; j < 26; j++) {
+                char[] a = start.toCharArray();
+                a[i] = (char) ('a' + j);
+                String t = new String(a);
+                if (dict.contains(t)) {
+                    temp.add(t);
+                    dict.remove(t);
+                    helper(rs, temp, end, t, dict, minsize);
+                    temp.remove(temp.size() - 1);
+                    dict.add(t);
+                }
+            }
+        }
+    }
+    
+    private boolean isLast(String s, String end) {
+        for (int i = 0; i < s.length(); i++) {
+            for (int j = 0; j < 26; j++) {
+                char[] a = s.toCharArray();
+                a[i] = (char) ('a' + j);
+                String t = new String(a);
+                if (t.equals(end)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+}
+
+
+BFS：Java太慢 这个没法过OJ， 要过Oj先BFS找出最短路径 然后从所有底层节点向上建。
+
+public class Solution {
+    public List<List<String>> findLadders(String start, String end, Set<String> dict) {
+        List<List<String>> rs = new ArrayList<List<String>>();
+        ArrayList<String> temp = new ArrayList<String>();
+        if (start.length() == 0 || dict.size() == 0) {
+            return rs;
+        }
+        Queue<String> q = new LinkedList<String>();
+        Queue<ArrayList<String>> r = new LinkedList<ArrayList<String>>();
+        q.offer(start);
+        //dict.remove(start);
+        temp.add(start);
+        r.offer(new ArrayList<String>(temp));
+        boolean find = false;
+        while (q.size() > 0) {
+            int size = q.size();
+            for (int i = 0; i < size; i++) {
+                String tt = q.poll(); 
+                ArrayList<String> x = r.poll();
+                for (int j = 0; j < tt.length(); j++) {
+                    StringBuilder st = new StringBuilder(tt);
+                    for (int k = 0; k < 26; k++) {
+                        st.setCharAt(j, (char) ('a' + k));
+                        String t = st.toString();
+                        if (t.equals(end)) {
+                            ArrayList<String> pre = new ArrayList<String>(x);
+                            pre.add(end);
+                            rs.add(new ArrayList<String>(pre));
+                            find = true;
+                            break;
+                        }
+                        if (dict.contains(t) && !x.contains(t)) {
+                            ArrayList<String> pre = new ArrayList<String>(x);
+                            pre.add(t);
+                            r.offer(pre);
+                            q.offer(t);
+                            //dict.remove(t);
+                        }
+                    }
+                    /*
+                    if (find == true) {
+                        break;
+                    }
+                    */
+                }
+            }
+            if (find == true) {
+                break;
+            }
+            
+        }
+        return rs;
+    }
+}

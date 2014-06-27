@@ -1,0 +1,56 @@
+Given a string s and a dictionary of words dict, add spaces in s to construct a sentence where each word is a valid dictionary word.
+
+Return all such possible sentences.
+
+For example, given
+s = "catsanddog",
+dict = ["cat", "cats", "and", "sand", "dog"].
+
+A solution is ["cats and dog", "cat sand dog"].
+
+
+
+------------------------------
+
+直接用subset的方法可以得出答案但是重复计算太多大数据必然超时。受到之前word break I 的思路启发，引入isvalid[]数组来记录，如果一个i之后rs无法增加证明这个i之后的结果都不用考虑，直接剪枝。
+
+
+public class Solution {
+    public List<String> wordBreak(String s, Set<String> dict) {
+        List<String> rs = new ArrayList<String>();
+        ArrayList<String> temp = new ArrayList<String>();
+        boolean[] isvalid= new boolean[s.length() + 1];
+        Arrays.fill(isvalid, true);
+        if (dict.isEmpty() ||s.length() == 0) {
+            return rs;
+        }
+        helper(s, dict, rs, 0, temp, isvalid);
+        return rs;
+    }
+    
+    private void helper(String s, Set<String> dict, List<String> rs, int pos,
+        ArrayList<String> temp, boolean[] isvalid) {
+        if (pos == s.length()) {
+            StringBuilder sb= new StringBuilder();
+            for (String i : temp) {
+                sb.append(i);
+                sb.append(" ");
+            }
+            sb.deleteCharAt(sb.length() - 1);
+            rs.add(sb.toString());
+            return;
+        }
+        for (int i = pos; i < s.length(); i++) {
+            String t = s.substring(pos, i + 1);
+            if (dict.contains(t) && isvalid[i + 1]) {
+                temp.add(t);
+                int before = rs.size();
+                helper(s, dict, rs, i + 1, temp, isvalid);
+                if (before == rs.size()) {
+                	isvalid[i + 1] = false;
+                }
+                temp.remove(temp.size() - 1);
+            } 
+        }
+    }
+}

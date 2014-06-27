@@ -1,0 +1,66 @@
+Follow up for problem "Populating Next Right Pointers in Each Node".
+
+What if the given tree could be any binary tree? Would your previous solution still work?
+
+Note:
+
+You may only use constant extra space.
+For example,
+Given the following binary tree,
+         1
+       /  \
+      2    3
+     / \    \
+    4   5    7
+After calling your function, the tree should look like:
+         1 -> NULL
+       /  \
+      2 -> 3 -> NULL
+     / \    \
+    4-> 5 -> 7 -> NULL
+
+
+---------------------------------
+
+如果用队列层次遍历的方法，版本1的方法可以直接用。完全一样。
+
+
+用constant空间的方法：
+
+public class Solution {
+    public void connect(TreeLinkNode root) {
+        if (root == null) {
+            return;
+        }
+        TreeLinkNode parent = root;
+        TreeLinkNode child;
+	TreeLinkNode pre；
+        while (parent != null) {
+            pre = null;
+            child = null;
+            while (parent != null) {
+                if (child == null){
+                    child = (parent.left != null) ? parent.left: parent.right;
+                }
+                if (parent.left != null) {
+                    if (pre == null) {
+                        pre = parent.left;
+                    } else {
+                        pre.next = parent.left;
+                        pre = pre.next;
+                    }
+                }
+                if (parent.right != null) {
+                    if (pre == null) {
+                        pre = parent.right;
+                    } else {
+                        pre.next = parent.right;
+                        pre = pre.next;
+                    }
+                }
+                parent = parent.next;
+            }
+            parent = child;
+        }
+    }
+}
