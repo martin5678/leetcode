@@ -50,3 +50,28 @@ public class Solution {
 }
 
 
+
+方法2 用哈希表来保存映射
+
+
+public class Solution {
+    public RandomListNode copyRandomList(RandomListNode head) {
+        HashMap<RandomListNode, RandomListNode> hm = 
+            new HashMap<RandomListNode, RandomListNode>();
+        // copy node
+        RandomListNode cur = head;
+        while (cur != null) {
+            RandomListNode temp = new RandomListNode(cur.label);
+            hm.put(cur, temp);
+            cur = cur.next;
+        }
+        // copy next and random
+        cur = head;
+        while (cur != null) {
+            hm.get(cur).next = hm.get(cur.next);
+            hm.get(cur).random = hm.get(cur.random);
+            cur = cur.next;
+        }
+        return hm.get(head);
+    }
+}

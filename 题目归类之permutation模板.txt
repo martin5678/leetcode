@@ -3,3 +3,4 @@
 3, Permutations
 4, Permutations II
 5, Letter Combinations of a Phone Number 
+6, Sudoku Solver

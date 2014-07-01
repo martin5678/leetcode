@@ -1,0 +1,11 @@
+1, Max Points on a Line
+2, Pascal's Triangle II
+3, Pascal's Triangle
+4, Gray Code
+5, Sqrt(x)
+6, Permutation Sequence
+7, Spiral Matrix II
+8, Spiral Matrix
+9, Pow(x, n)
+10, Next Permutation
+11, ZigZag Conversion

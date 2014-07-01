@@ -8,33 +8,25 @@ My solution: It takes two recursions.
 
 
 
-/**
- * Definition for binary tree
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode(int x) { val = x; }
- * }
- */
-import java.lang.Math;
 public class Solution {
     public boolean isBalanced(TreeNode root) {
-        if(root==null) return true;
-        if(Math.abs(maxDepth(root.right)-maxDepth(root.left))<=1) return isBalanced(root.left)&&isBalanced(root.right);
-        else return false;
-    }
-    public int maxDepth(TreeNode root) {
-        if(root==null) return 0;
-        if(root.left==null&&root.right==null) return 1;
-        else{
-            return max(maxDepth(root.left)+1,maxDepth(root.right)+1);
+        if (root == null) {
+            return true;
         }
+        int left = getHeight(root.left);
+        int right = getHeight(root.right);
+        if (Math.abs(left - right) > 1) {
+            return false;
+        }
+        return isBalanced(root.left) && isBalanced(root.right);
     }
-    public int max(int a, int b){
-        return a>=b?a:b;
+    
+    private int getHeight(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        return Math.max(getHeight(root.right), getHeight(root.left)) + 1;
     }
-
 }
 
 

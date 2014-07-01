@@ -49,3 +49,28 @@ public class Solution {
         return rs;
     }
 }
+
+
+
+
+public class Solution {
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> rs = new LinkedList<Integer>();
+        if (root == null) {
+            return rs;
+        }
+        Stack<TreeNode> st = new Stack<TreeNode>();
+        st.push(root);
+        while(!st.isEmpty()) {
+            TreeNode temp = st.pop();
+            rs.add(temp.val);
+            if (temp.right != null) {
+                st.push(temp.right);
+            }
+            if (temp.left != null) {
+                st.push(temp.left);
+            }
+        }
+        return rs;
+    }
+}
