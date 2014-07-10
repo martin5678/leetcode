@@ -39,3 +39,38 @@ public class Solution {
         return dummy.next;
     }
 }
+
+
+------------------------------------------------------
+
+
+
+public class Solution {
+    public ListNode mergeKLists(List<ListNode> lists) {
+        if (lists.size() == 0 || lists == null) {
+            return null;
+        }
+        Comparator<ListNode> cmp = new Comparator<ListNode>() {
+            public int compare(ListNode l1, ListNode l2) {
+                return l1.val - l2.val;
+            }
+        };
+        PriorityQueue<ListNode> pq = new PriorityQueue<ListNode>(lists.size(), cmp);
+        ListNode dummy = new ListNode(0);
+        ListNode cur = dummy;
+        for (ListNode l : lists) {
+            if (l != null) {
+                pq.add(l);    
+            }
+        }
+        while (pq.size() > 0) {
+            ListNode temp = pq.poll();
+            cur.next = temp;
+            cur = cur.next;
+            if (temp.next != null) {
+                pq.offer(temp.next);
+            }
+        }
+        return dummy.next;
+    }
+}

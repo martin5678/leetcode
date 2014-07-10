@@ -25,6 +25,7 @@ Visually, the graph looks like the following:
 ------------------------------------------------
 
 先bfs获得所有顶点，然后先克隆顶点再克隆边。 当然还有优化的方法是两个一起克隆这样只需要走一遍。
+注意重复路径问题，所以需要一边遍历一边往hashmap里面放，这样才不会导致放入重复节点。
 
 
 
@@ -64,5 +65,40 @@ public class Solution {
             }
         }
         return relation.get(node);
+    }
+}
+
+
+
+
+
+-------------------------------------------------------
+直接一步添加完成每遍历一个neighbor就复制。
+
+public class Solution {
+    public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
+        if (node == null) {
+            return null;
+        }
+        HashMap<UndirectedGraphNode, UndirectedGraphNode> hm = 
+            new HashMap<UndirectedGraphNode, UndirectedGraphNode>();
+        Queue<UndirectedGraphNode> bfs = new LinkedList<UndirectedGraphNode>();  
+        ArrayList<UndirectedGraphNode> allnodes = new ArrayList<UndirectedGraphNode>();
+        // BFS to copy all the nodes
+        bfs.offer(node);
+        allnodes.add(node);
+        hm.put(node, new UndirectedGraphNode(node.label));
+        while (bfs.size() > 0) {
+            UndirectedGraphNode temp = bfs.poll();
+            for (UndirectedGraphNode i : temp.neighbors) {
+                if (!hm.containsKey(i)) {
+                    bfs.offer(i);
+                    allnodes.add(i);
+                    hm.put(i, new UndirectedGraphNode(i.label));
+                }
+                hm.get(temp).neighbors.add(hm.get(i));
+            }    
+        }
+        return hm.get(node);
     }
 }

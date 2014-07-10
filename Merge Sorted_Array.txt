@@ -25,3 +25,29 @@ public class Solution {
         }
     }    
 }
+
+
+---------------------
+
+
+public class Solution {
+    public void merge(int A[], int m, int B[], int n) {
+        int indexa = m - 1;
+        int indexb = n - 1;
+        int cur = A.length - 1;
+        while (indexa >= 0 && indexb >= 0) {
+            if (A[indexa] > B[indexb]) {
+                A[cur] = A[indexa--];
+            } else {
+                A[cur] = B[indexb--];
+            }
+            cur--;
+        }
+        while (indexa >= 0) {
+            A[cur--] = A[indexa--];
+        }
+        while (indexb >= 0) {
+            A[cur--] = B[indexb--];
+        }
+    }
+}

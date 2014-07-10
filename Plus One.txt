@@ -68,5 +68,33 @@ public class Solution {
 }
 
 
+-----------------------------------
+
+以上全是以前写的全是shit。。。
+
+
+public class Solution {
+    public int[] plusOne(int[] digits) {
+        StringBuilder sb = new StringBuilder();
+        int sum = (digits[digits.length - 1] + 1) % 10;
+        int carry = (digits[digits.length - 1] + 1) / 10;
+        sb.append(sum);
+        for (int i = digits.length - 2; i >= 0; i--) {
+            sum = (digits[i] + carry) % 10;
+            carry = (digits[i] + carry) / 10;
+            sb.insert(0, sum);
+        }
+        if (carry == 1) {
+            sb.insert(0, 1);
+        }
+        int[] result = new int[sb.length()];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = sb.charAt(i) - '0';
+        }
+        return result;
+    }
+}
+
+
 
 

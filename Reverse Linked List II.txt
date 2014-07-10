@@ -40,3 +40,37 @@ public class Solution {
         return dummy.next;
     }
 }
+
+
+
+--------------------------
+第二次写一次AC而且代码质量比前一个好很多。
+
+public class Solution {
+    public ListNode reverseBetween(ListNode head, int m, int n) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode pre = dummy;
+        ListNode cur = head;
+        // find the reverse begin node and the node before it.
+        for (int i = 1; i < m; i++) {
+            pre = pre.next;
+            cur = cur.next;
+        }
+        ListNode newHead = null;
+        for (int i = m; i <= n; i++) {
+            ListNode temp = cur.next;
+            cur.next = newHead;
+            newHead = cur;
+            cur = temp;
+            if (i == n) {
+                pre.next.next = cur;
+                pre.next = newHead;
+            }
+        }
+        return dummy.next;
+    }
+}

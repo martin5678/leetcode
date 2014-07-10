@@ -12,17 +12,16 @@ solution:
 
 public class Solution {
     public int maxProfit(int[] prices) {
-        int n = prices.length;
-        if(n == 0) return 0;
-        int maxprice = prices[n - 1];
-        int maxv = 0;
-        for(int i = n - 1; i >= 0; i--){
-            maxprice = max(maxprice, prices[i]);
-            maxv = max(maxv, maxprice - prices[i]);
+        int len = prices.length;
+        if (len == 0) {
+            return 0;
         }
-        return maxv;
-    }
-    public int max(int a, int b){
-        return a >= b ? a : b;
+        int maxprofit = 0;
+        int maxvalue = prices[len - 1];
+        for (int i = len - 2; i >= 0; i--) {
+            maxprofit = Math.max(maxprofit, maxvalue - prices[i]);
+            maxvalue = Math.max(maxvalue, prices[i]);
+        }
+        return maxprofit;
     }
 }

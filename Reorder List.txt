@@ -11,3 +11,56 @@ Given {1,2,3,4}, reorder it to {1,4,2,3}.
 第一步找中间节点，把链表分成两部分。
 二，反转后半部分链表
 三，合并链表。
+
+有几个注意点，第一是找到中间节点之后要断开它前面节点和它的连接
+第二合并的时候只有head还没走完mid。next才可以等于head
+
+public class Solution {
+    public void reorderList(ListNode head) {
+        if (head == null || head.next == null) {
+            return;
+        }
+        ListNode mid = findMid(head);
+        mid = reverse(mid);
+        merge(head, mid);
+    }
+    
+    private ListNode findMid(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head;
+        ListNode pre = null;
+        while (fast != null && fast.next != null) {
+            pre = slow;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        // disconnect the last node of first half
+        pre.next = null;
+        return slow;
+    }
+    
+    private ListNode reverse(ListNode head) {
+        ListNode newHead = null;
+        while (head != null) {
+            ListNode temp = head.next;
+            head.next = newHead;
+            newHead = head;
+            head = temp;
+        }
+        return newHead;
+    }
+    
+    private void merge(ListNode head, ListNode mid) {
+        while (head != null) {
+            ListNode tempmid = mid.next;
+            ListNode temphead = head.next;
+            head.next = mid;
+            head = temphead;
+            // important only head.next is not null 
+            if (temphead != null) {
+                mid.next = temphead;
+            }
+            mid = tempmid;
+        }
+    }
+}

@@ -28,3 +28,36 @@ public class Solution {
         return dummy.next;
     }
 }
+
+
+
+
+
+
+
+
+
+
+==============================================
+
+public class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode cur = head;
+        ListNode pre = dummy;
+        while (cur != null && cur.next != null) {
+            if (cur.val == cur.next.val) {
+                while (cur.next != null && cur.val == cur.next.val) {
+                    cur = cur.next;
+                }
+                pre.next = cur.next;
+                cur = cur.next;
+            } else {
+                pre = pre.next;
+                cur = cur.next;
+            }
+        }
+        return dummy.next;
+    }
+}

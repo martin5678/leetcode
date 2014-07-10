@@ -61,4 +61,47 @@ public class Solution {
         }
         return len;
     }
-}    
+}
+
+
+------------------------------------------
+
+
+重写了trim()方法
+
+
+public class Solution {
+    public int lengthOfLastWord(String s) {
+        // remove the trailing and leading spaces
+        int tail = s.length() - 1;
+        int head = 0;
+        while (tail > head && tail >= 0 && head < s.length()) {
+            if (s.charAt(tail) == ' ') {
+                tail--;
+            } 
+            if (s.charAt(head) == ' ') {
+                head++;
+            }
+            if (tail >= 0 && head < s.length() && 
+                s.charAt(head) != ' ' && s.charAt(tail) != ' ') {
+                break;
+            }
+        }
+        if (tail == head && s.charAt(tail) == ' ') {
+            tail--;
+        }
+        String sub = s.substring(head, tail + 1);
+        if (sub.length() == 0) {
+            return 0;
+        }
+        tail = sub.length() - 1;
+        while (tail >= 0) {
+            if (sub.charAt(tail) != ' ') {
+                tail--;
+            } else {
+                break;
+            }
+        }
+        return sub.length() - 1 - tail;
+    }
+}

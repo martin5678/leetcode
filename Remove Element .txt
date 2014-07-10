@@ -4,7 +4,7 @@ The order of elements can be changed. It doesn't matter what you leave beyond th
 
 
 -----------------------------------------------
-1,my solution.
+1,my solution.(bull shit two months ago)
 
 move the element to the tail of the array and swap the element in the tail to the current location.
 
@@ -39,15 +39,14 @@ public class Solution {
 2, A simpler method.
 
 
-int removeElement(int A[], int n, int elem)
-{
-  if(n == 0)
-		return n;
-	int len = 0;
-	for(int i = 0; i < n; i++)
-	{
-		if(A[i] != elem)
-			A[len++] = A[i];
-	}
-	return len;
+public class Solution {
+    public int removeElement(int[] A, int elem) {
+        int current = 0;
+        for (int index = 0; index < A.length; index++) {
+            if (A[index] != elem) {
+                A[current++] = A[index];
+            }
+        }
+        return current;
+    }
 }

@@ -72,3 +72,27 @@ public class Solution {
 }
 
 
+---------------------------------------------
+
+public class Solution {
+    public String intToRoman(int num) {
+        String[] sdict = {"M", "CM", "D", "CD", 
+                          "C", "XC", "L", "XL", "X", 
+                          "IX", "V", "IV", "I"};
+        int[] idict = {1000, 900, 500, 400, 100,
+                        90, 50, 40, 10, 9, 5, 4, 1};
+        String result = "";
+        while (num > 0) {
+            int i;
+            for (i = 0; i < idict.length; i++) {
+                if (num >= idict[i]) {
+                    result = result + sdict[i];
+                    break;
+                }
+            }
+            num -= idict[i];
+        }
+        return result;
+    }   
+}
+

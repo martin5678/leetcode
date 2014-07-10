@@ -36,3 +36,32 @@ public class Solution {
         return smalldummy.next;
     }
 }
+
+----------------
+
+第二遍又是一次AC而且代码风格和简洁好很多。
+
+
+public class Solution {
+    public ListNode partition(ListNode head, int x) {
+        ListNode dummysmall = new ListNode(0);
+        ListNode small = dummysmall;
+        ListNode dummybig = new ListNode(0);
+        ListNode big = dummybig;
+        while (head != null) {
+            if (head.val < x) {
+                small.next = head;
+                small = small.next;
+            } else {
+                big.next = head;
+                big = big.next;
+            }
+            head = head.next;
+        }
+	// break the link of last big;
+        big.next = null;
+	// connect together
+        small.next = dummybig.next;
+        return dummysmall.next;
+    }
+}

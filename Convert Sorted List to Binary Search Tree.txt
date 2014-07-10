@@ -1,0 +1,39 @@
+Given a singly linked list where elements are sorted in ascending order, convert it to a height balanced BST.
+
+
+
+----------------------------------------------
+
+
+bottom up 的方法， 注意java里面需要用成员变量来走list  c++则不用
+
+
+
+
+
+public class Solution {
+    private ListNode current;
+    public TreeNode sortedListToBST(ListNode head) {
+        int length = 0;
+        ListNode count = head;
+        while (count != null) {
+            count = count.next;
+            length++;
+        }
+        current = head;
+        return put(0, length - 1);
+    }
+    
+    private TreeNode put(int start, int end) {
+        if (start > end) {
+            return null;
+        }
+        int mid = start + (end - start) / 2;
+        TreeNode left = put(start, mid - 1);
+        TreeNode root = new TreeNode(current.val);
+        root.left = left;
+        current = current.next;
+        root.right = put(mid + 1, end);
+        return root;
+    }
+}

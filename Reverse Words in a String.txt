@@ -39,3 +39,47 @@ public class Solution {
         return sb.toString();
     }
 }
+
+
+
+
+-----------------------------
+
+三步翻转法
+几个corner case 注意到最后一个字符的时候需要添加一次。
+
+public class Solution {
+    public String reverseWords(String s) {
+        // remove trailing and leading spaces
+        s = s.trim();
+        if (s.length() == 0) {
+            return s;
+        }
+        s = reverse(s);
+        StringBuilder sentence = new StringBuilder();
+        StringBuilder word = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == ' ' && word.length() != 0) {
+                sentence.append(reverse(word.toString())).append(' ');
+                word = new StringBuilder();
+            } else if (s.charAt(i) != ' '){
+                word.append(s.charAt(i));
+            }
+            if (i == s.length() - 1 && word.length() != 0) {
+                sentence.append(reverse(word.toString())).append(' ');
+            }
+        }
+        sentence.deleteCharAt(sentence.length() - 1);
+        return sentence.toString();
+    }
+    
+    private String reverse(String s) {
+        char[] temp = s.toCharArray();
+        for (int i = 0; i <= (temp.length - 1) / 2; i++) {
+            char t = temp[i];
+            temp[i] = temp[temp.length - i - 1];
+            temp[temp.length - i - 1] = t;
+        }
+        return new String(temp);
+    }
+}

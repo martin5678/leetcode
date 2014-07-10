@@ -5,26 +5,31 @@ Input is guaranteed to be within the range from 1 to 3999.
 
 -------------------------------------------------
 
+最后一个字母无论如何都是加。
+
 Solution:
 
 public class Solution {
     public int romanToInt(String s) {
-        char temp[] = s.toCharArray();
-        int n = temp.length;
-        HashMap<Character, Integer> ht = new HashMap<Character, Integer>();
-        ht.put('I', 1 );
-        ht.put('V', 5 );
-        ht.put('X', 10 );
-        ht.put('L', 50 );
-        ht.put('C', 100 );
-        ht.put('D', 500 );
-        ht.put('M', 1000 );
-        int result = ht.get(temp[n - 1]);
-        for(int i = 0; i < n -1; i++) {
-            if(ht.get(temp[i]) >= ht.get(temp[i + 1])) {
-                result += ht.get(temp[i]);
+        if (s.length() == 0 || s == null) {
+            return 0;
+        }
+        // Initialize dictionary 
+        HashMap<Character, Integer> dict = new HashMap<Character, Integer>();
+        dict.put('I', 1);
+        dict.put('V', 5);
+        dict.put('X', 10);
+        dict.put('L', 50);
+        dict.put('C', 100);
+        dict.put('D', 500);
+        dict.put('M', 1000);
+        int len = s.length();
+        int result = dict.get(s.charAt(len - 1));
+        for (int i = 0; i < len - 1; i++) {
+            if (dict.get(s.charAt(i)) >= dict.get(s.charAt(i + 1))) {
+                result += dict.get(s.charAt(i));
             } else {
-                result -= ht.get(temp[i]);
+                result -= dict.get(s.charAt(i));
             }
         }
         return result;

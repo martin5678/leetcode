@@ -31,3 +31,36 @@ public class Solution {
 
 
 Notice I use the break when j equals to the length, in C++ it does not need this code because C++ doesn't check the index of array out of bound.
+
+注意注释的地方一定要记得。
+
+public class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        HashMap<Character, Integer> hm = new HashMap<Character, Integer>();
+        int current = 0;
+        int before = 0;
+        int maxlength = 0;
+        while (current < s.length()) {
+            if (current == s.length() - 1 && !hm.containsKey(s.charAt(current))) {
+                maxlength = Math.max(maxlength, current - before + 1);
+                break;
+            }
+            if (!hm.containsKey(s.charAt(current))) {
+                hm.put(s.charAt(current), current);
+            } else {
+                maxlength = Math.max(maxlength, current - before);
+                int pos = hm.get(s.charAt(current));
+                while(before <= pos) {
+                    hm.remove(s.charAt(before));
+                    before++;
+                }
+		// important
+                hm.put(s.charAt(current), current);
+            }
+            current++;
+        }
+        return maxlength;
+    }
+}
+
+

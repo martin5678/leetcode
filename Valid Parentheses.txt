@@ -13,26 +13,32 @@ Note: (a[i] - sk.pop()  2) is based on the ascii code.
 Solution:
 
 
-import java.util.Stack;
 public class Solution {
     public boolean isValid(String s) {
-        int n = s.length();
-        StackCharacter sk = new StackCharacter();
-        char[] a = s.toCharArray();
-        for(int i = 0; i  n; i++){
-            if(isLeft(a[i])){
-                sk.push(a[i]);
+        Stack<Character> st = new Stack<Character>();
+        int i = 0;
+        while (i < s.length()) {
+            if (isLeft(s.charAt(i))) {
+                st.push(s.charAt(i));
+            } else {
+                if (st.size() == 0) {
+                    return false;
+                }
+                char t = st.pop();
+                int diff = s.charAt(i) - t;
+                if (diff > 2) {
+                    return false;
+                }
             }
-            else{
-                if(sk.isEmpty()) return false;
-                else if(a[i] - sk.pop()  2) return false;
-            }
+            i++;
         }
-        if(sk.isEmpty()) return true;
-        else return false;
+        if (st.size() > 0) {
+            return false;
+        }
+        return true;
     }
-    public boolean isLeft(char a){
-        return a == '('  a == '{'  a == '[';
+    
+    private boolean isLeft(char a) {
+        return a == '{' || a == '(' || a == '[';
     }
-  
 }

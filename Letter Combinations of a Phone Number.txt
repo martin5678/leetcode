@@ -48,3 +48,50 @@ public class Solution {
         }
     }
 }
+
+
+
+
+-=================================================
+
+
+
+public class Solution {
+    public List<String> letterCombinations(String digits) {
+        List<String> rs = new ArrayList<String>();
+        HashMap<Integer, char[]> hm = new HashMap<Integer, char[]>();
+        ArrayList<Character> temp = new ArrayList<Character>();
+        hm.put(0, new char[] {});
+        hm.put(1, new char[] {});
+        hm.put(2, new char[] {'a', 'b', 'c'});
+        hm.put(3, new char[] {'d', 'e', 'f'});
+        hm.put(4, new char[] {'g', 'h', 'i'});
+        hm.put(5, new char[] {'j', 'k', 'l'});
+        hm.put(6, new char[] {'m', 'n', 'o'});
+        hm.put(7, new char[] {'p', 'q', 'r', 's'});
+        hm.put(8, new char[] {'t', 'u', 'v'});
+        hm.put(9, new char[] {'w', 'x', 'y', 'z'});
+        helper(digits, rs, 0, hm, temp);
+        return rs;
+    }
+    
+    private void helper(String digits, List<String> rs, int pos,
+        HashMap<Integer, char[]> hm, ArrayList<Character> temp) {
+        if (temp.size() == digits.length()) {
+            StringBuilder sb = new StringBuilder();
+            for (char i : temp) {
+                sb.append(i);
+            }
+            rs.add(sb.toString());
+            return;
+        }
+        for (int i = pos; i < digits.length(); i++) {
+            int t = digits.charAt(i) - '0'; 
+            for (char a : hm.get(t)) {
+                temp.add(a);
+                helper(digits, rs, i + 1, hm, temp);
+                temp.remove(temp.size() - 1);
+            }
+        }
+    }
+}

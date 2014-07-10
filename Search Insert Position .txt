@@ -32,7 +32,31 @@ public class Solution {
         if(target > A[index]) return index + 1;
         else return index;   
     }
-
 }
 
+
+------------------------------------------
+其实分析了各种情况之后 如果需要插入， 位置肯定在end+1
+
+public class Solution {
+    public int searchInsert(int[] A, int target) {
+        if (A.length == 0 || A == null) {
+            return 1;
+        }
+        int start = 0;
+        int end = A.length - 1;
+        int mid;
+        while (start <= end) {
+            mid = start + (end - start) / 2;
+            if (A[mid] == target) {
+                return mid;
+            } else if (A[mid] > target) {
+                end = mid - 1;
+            } else {
+                start = mid + 1;
+            }
+        }
+        return end + 1;
+    }
+}
 
