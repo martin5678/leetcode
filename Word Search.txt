@@ -15,6 +15,8 @@ word = "SEE", -> returns true,
 word = "ABCB", -> returns false.
 
 ------------------------------
+DFS和BFS都可以用，但是时间复杂度上DFS是 O（n^3）一共n^2 个节点， 每个节点最多走的深度是word的长度。  如果BFS的话 也是一共n^2个节点，但是每次BFS要消耗n^2 时间。
+
 
 public class Solution {
     public boolean exist(char[][] board, String word) {
@@ -52,5 +54,80 @@ public class Solution {
         || find(board, word, i , j - 1, length + 1);
         board[i][j] = word.charAt(length);
         return rs;
+    }
+}
+
+
+
+===============================================
+
+BFS 可以用但是大集合果断TLE了
+
+
+public class Solution {
+    public boolean exist(char[][] board, String word) {
+        if (board.length == 0) {
+            return false;
+        }
+        if (word.length() == 0) {
+            return true;
+        }
+        int row = board.length;
+        int col = board[0].length;
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (board[i][j] != word.charAt(0)) {
+                    continue;
+                }
+                if (bfs(board, word, i, j)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    private boolean bfs(char[][] board, String word, int row, int col) {
+        char[][] t = board.clone();
+        Queue<Integer> rowindex = new LinkedList<Integer>();
+        Queue<Integer> colindex = new LinkedList<Integer>();
+        rowindex.offer(row);
+        colindex.offer(col);
+        int level = 0;
+        while (rowindex.size() > 0) {
+            if (level > word.length() - 1) {
+                break;
+            }
+            int size = rowindex.size();
+            for (int i = 0; i < size; i++) {
+                int x = rowindex.poll();
+                int y = colindex.poll();
+                char temp = t[x][y];
+                t[x][y] = '#';
+                if (level == word.length() - 1) {
+                    if (temp == word.charAt(level)) {
+                        return true;
+                    }
+                }
+                if (x - 1 >= 0 && word.charAt(level + 1) == t[x - 1][y]) {
+                    rowindex.offer(x - 1);
+                    colindex.offer(y);
+                }
+                if (x + 1 < board.length && word.charAt(level + 1) == t[x + 1][y]) {
+                    rowindex.offer(x + 1);
+                    colindex.offer(y);
+                }
+                if (y - 1 >= 0 && word.charAt(level + 1) == t[x][y - 1]) {
+                    rowindex.offer(x);
+                    colindex.offer(y - 1);
+                }
+                if (y + 1 <board[0].length && word.charAt(level + 1) == t[x][y + 1]) {
+                    rowindex.offer(x);
+                    colindex.offer(y + 1);
+                }
+            }
+            level++;
+        }
+        return false;
     }
 }

@@ -13,6 +13,8 @@ The minimum number of jumps to reach the last index is 2. (Jump 1 step from inde
 
 DP, this one gets TLE, but I can do some modification.
 
+贪心法可以只用O（n）就解出来， 计算每走一步能打到的最远距离 什么时候最远距离超过或者等于last就返回当时的步数。
+
 
 public class Solution {
     public int jump(int[] A) {
@@ -52,5 +54,33 @@ public class Solution {
             }
         }        
         return steps[A.length - 1];
+    }
+}
+======================================
+贪心
+
+
+public class Solution {
+    public int jump(int[] A) {
+        if (A.length == 0) {
+            return 0;
+        }
+        int step = 0;
+        int reach = 0;
+        int cur = 0;
+        while (cur < A.length) {
+            if (reach >= A.length - 1) {
+                break;
+            }
+            int temp = reach;
+            while (cur <= temp) {
+                if (A[cur] + cur > reach) {
+                    reach = A[cur] + cur;
+                }
+                cur++;
+            }
+            step++;
+        }
+        return step;
     }
 }

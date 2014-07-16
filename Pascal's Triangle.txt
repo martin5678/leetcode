@@ -50,3 +50,40 @@ public class Solution {
         return rs;
     }
 }
+
+
+
+
+
+
+-----------------------------
+
+同样的算法 现在写的code比以前真强太多了。
+
+public class Solution {
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> rs = new ArrayList<List<Integer>>();
+        if (numRows == 0) {
+            return rs;
+        }
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+        temp.add(1);
+        int before = 1;
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j <= i; j++) {
+                if (j == 0) {
+                    continue;
+                }
+                if (j == i) {
+                    temp.add(1);
+                    continue;
+                }
+                int t = temp.get(j);
+                temp.set(j, before + temp.get(j));
+                before = t;
+            }
+            rs.add(new ArrayList<Integer>(temp));
+        }
+        return rs;
+    }
+}

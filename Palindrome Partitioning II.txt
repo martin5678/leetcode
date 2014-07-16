@@ -24,16 +24,16 @@ j - i < 2 && str[i] == str[j] （即如果j - i == 1时，为两个字符相等，如果j - i ==
 
 public class Solution {
     public int minCut(String s) {
-        int n = s.length();
-        if (n <= 1) {
+        int len = s.length();
+        if (len <= 1) {
             return 0;
         }
-        boolean[][] palindrome = new boolean[n][n];
-        Palindrome(palindrome, s);
-        int[] cut = new int[n];
-        Arrays.fill(cut, n - 1);
+        boolean[][] palindrome = new boolean[len][len];
+        fillPalindrome(palindrome, s);
+        int[] cut = new int[len];
+        Arrays.fill(cut, len - 1);
         cut[0] = 0;
-        for (int i = 1; i < n; i++) {
+        for (int i = 1; i < len; i++) {
             if (palindrome[0][i] == true) {
                 cut[i] = 0;
                 continue;
@@ -44,24 +44,16 @@ public class Solution {
                 }
             }
         }
-        return cut[n - 1];
+        return cut[len - 1];
     }
     
-    private void Palindrome(boolean[][] palindrome, String s) {
-        int len = palindrome.length;
-        palindrome[0][0] = true;
-        palindrome[len - 1][len - 1] = true;
-        for (int i = 0; i < s.length(); i++) {
+    public void fillPalindrome(boolean[][] palindrome, String s) {
+        int len = s.length();
+        for (int i = 0; i < len; i++) {
             palindrome[i][i] = true;
-        }
-        for (int i = 0; i < s.length() - 1; i++) {
-            palindrome[i][i + 1] = (s.charAt(i) == s.charAt(i + 1));
         }
         for (int i = len - 1; i >= 0; i--) {
             for (int j = i; j < len; j++) {
-                if (j == 0 || i == len - 1) {
-                    continue;
-                }
                 if (j - i < 2 || palindrome[i + 1][j - 1] == true) {
                     if (s.charAt(i) == s.charAt(j)) {
                         palindrome[i][j] = true;

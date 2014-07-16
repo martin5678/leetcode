@@ -14,21 +14,20 @@ Two indexes left and right. The left index move to right and the right index mov
 This idea is tricky, I learn it from Internet, but my code is much elegant and simple. lol
 
 
-
 public class Solution {
     public int maxArea(int[] height) {
-        int n = height.length;
-        int i = 0, j = n - 1;
-        int ans = 0;
-        while(j > i){
-           if(height[i] > height[j]){
-               ans = ans > height[j] * (j - i) ? ans : height[j] * (j - i);
-               j--;
-           }else{
-               ans = ans > height[i] * (j - i) ? ans : height[i] * (j - i);
-               i++;
-           }
+        int last = height.length - 1;
+        int first = 0;
+        int max = 0;
+        while (last > first) {
+            if (height[last] > height[first]) {
+                max = Math.max(max, height[first] * (last - first));
+                first++;
+            } else {
+                max = Math.max(max, height[last] * (last - first));
+                last--;
+            }
         }
-        return ans;
+        return max;
     }
 }

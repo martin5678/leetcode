@@ -1,0 +1,40 @@
+Given a binary tree, find the maximum path sum.
+
+The path may start and end at any node in the tree.
+
+For example:
+Given the below binary tree,
+
+       1
+      / \
+     2   3
+Return 6.
+
+-------------------------------
+先设一个成员变量max用来记录 当左子树 根节点以及右子树一起构成最大值情况下的最大值，因为当出现这种情况， 就没法继续向上走了。而return的变量必然是可以继续向上走的。
+
+public class Solution {
+    private int max;
+    public int maxPathSum(TreeNode root) {
+        max = Integer.MIN_VALUE;
+        helper(root);
+        return max;
+    }
+    
+    private int helper(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int left = helper(root.left);
+        int right = helper(root.right);
+        int cur = root.val;
+        if (left > 0) {
+            cur += left;
+        }
+        if (right > 0) {
+            cur += right;
+        }
+        max = Math.max(cur, max);
+        return left > 0 && right >0 ? Math.max(left, right) + root.val : cur;
+    }
+}

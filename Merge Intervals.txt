@@ -43,3 +43,35 @@ public class Solution {
         }
     };
 }
+
+----------------------------------------------
+
+public class Solution {
+    public List<Interval> merge(List<Interval> intervals) {
+        List<Interval> rs = new ArrayList<Interval>();
+        if (intervals.size() <= 1) {
+            return intervals;
+        }
+        Comparator<Interval> cmp = new Comparator<Interval>() {
+            public int compare(Interval i1, Interval i2) {
+                return i1.start - i2.start;
+            }
+        };
+        Collections.sort(intervals, cmp);
+        Interval temp = intervals.get(0);
+        for (int i = 1; i < intervals.size(); i++) {
+            if (temp.end < intervals.get(i).start) {
+                rs.add(temp);
+                temp = intervals.get(i);
+            } else {
+                temp = merge(temp, intervals.get(i));
+            }
+        }
+        rs.add(temp);
+        return rs;
+    }
+    
+    private Interval merge(Interval i1, Interval i2) {
+        return new Interval(i1.start, i2.end > i1.end ? i2.end : i1.end);
+    }
+}

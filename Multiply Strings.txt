@@ -36,3 +36,44 @@ public class Solution {
         return sb.toString();
     }
 }
+
+
+
+
+------------------------
+注意最后结果数组里面最后一个0 是不能删除的。
+
+public class Solution {
+    public String multiply(String num1, String num2) {
+         if (num1.length() == 0 || num2.length() == 0) {
+             return "";
+         }
+         int len1 = num1.length();
+         int len2 = num2.length();
+         int[] nums = new int[len1 + len2];
+         int carry = 0;
+         int product = 0;
+         for (int i = len1 - 1; i >= 0; i--) {
+             int j;
+             carry = 0;
+             for (j = len2 - 1; j >= 0; j--) {
+                 product = nums[i + j + 1] + carry +
+                    (num1.charAt(i) - '0') * (num2.charAt(j) - '0');
+                nums[i + j + 1] = product % 10;
+                carry = product / 10;
+             }
+             nums[i + j + 1] = carry;
+         }
+         int index;
+         for (index = 0; index < nums.length - 1; index++) {
+             if (nums[index] != 0) {
+                 break;
+             }
+         }
+         StringBuilder sb = new StringBuilder();
+         for (int i = index; i < nums.length; i++) {
+             sb.append(nums[i]);
+         }
+         return sb.toString();
+    }
+}

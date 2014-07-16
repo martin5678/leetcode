@@ -9,43 +9,50 @@ Version 1 的简化版 不需要画图什么的 只需要一个sum来记录总数就好。
 
 
 public class Solution {
-    private int sum = 0;
-    
+    private int total = 0;
     public int totalNQueens(int n) {
+        if (n <= 0) {
+            return 0;
+        }
         ArrayList<Integer> temp = new ArrayList<Integer>();
-        search(temp, n);
-        return sum;
+        helper(n, temp);
+        return total;
     }
     
-    private void search(ArrayList<Integer> temp, int n) {
+    private void helper(int n, ArrayList<Integer> temp) {
         if (temp.size() == n) {
-            sum ++;
-            return;
+            total += 1;
         }
         for (int i = 0; i < n; i++) {
-            if (!isValid(temp, i)) {
-                continue;
+            if (isValid(temp, i)) {
+                temp.add(i);
+                helper(n, temp);
+                temp.remove(temp.size() - 1);
             }
-            temp.add(i);
-            search(temp, n);
-            temp.remove(temp.size() - 1);
         }
+        
     }
     
-    private boolean isValid(ArrayList<Integer> temp, int col) {
+    private boolean isValid(ArrayList<Integer> temp, int last) {
         int row = temp.size();
+        // check col
         for (int i = 0; i < row; i++) {
-            if (temp.get(i) == col) {
+            if (temp.get(i) == last) {
                 return false;
             }
-            if (temp.get(i) - i == col - row) {
+        }
+        // check left top
+        for (int i = 0; i < row; i++) {
+            if (temp.get(i) + i == last + row) {
                 return false;
             }
-            if (temp.get(i) + i == col + row) {
+        }
+        // check right top
+        for (int i = 0; i < row; i++) {
+            if (temp.get(i) - i == last - row) {
                 return false;
             }
         }
         return true;
     }
-    
 }

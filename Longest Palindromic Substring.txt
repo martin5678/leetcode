@@ -2,6 +2,48 @@ Given a string S, find the longest palindromic substring in S. You may assume th
 
 -------------------------------------
 
+
+DP算法：
+
+
+
+public class Solution {
+    public String longestPalindrome(String s) {
+        int len = s.length();
+        if (len == 0) {
+            return "";
+        }
+        boolean[][] dp = new boolean[len][len];
+        // Initialize
+        for (int i = 0; i < len; i++) {
+            dp[i][i] = true;
+        }
+        int maxlength = 1;
+        int maxindexi = 0;
+        int maxindexj = 0;
+        for (int i = len - 1; i >= 0; i--) {
+            for (int j = i; j < len; j++) {
+                if (j - i < 2 || dp[i + 1][j - 1] == true ) {
+                    if (s.charAt(i) != s.charAt(j)) {
+                        continue;
+                    }
+                    dp[i][j] = true;
+                    if (j - i + 1 > maxlength) {
+                        maxlength = j - i + 1;
+                        maxindexi = i;
+                        maxindexj = j;
+                    } 
+                }
+            }
+        }
+        return s.substring(maxindexi, maxindexj + 1);
+    }
+}
+
+===============================
+
+
+
 这题用DP做需要O（n^2）时间 O（n^2）空间，但是用中间向两边发散法是O（n^2）时间 O（1）空间，还有一种O（n）和O（n）的算法比较复杂就不用了。对每一个字符为中心向两边发散找到以这个字符为中心的最长回文，注意中心有2n - 1种，因为一个字符为中心 以及2个字符为中心。
 
 
@@ -31,9 +73,6 @@ public class Solution {
             && s.charAt(left) == s.charAt(right)) {
             left--;
             right++;
-        }
-        if (i == j - 1 && s.charAt(i) != s.charAt(j)) {
-            return s.substring(i, i + 1);
         }
         return s.substring(left + 1, right);
     }

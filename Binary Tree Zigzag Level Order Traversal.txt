@@ -60,3 +60,40 @@ public class Solution {
         }
     }
 }
+
+
+
+----------------------------------------------------
+
+public class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> rs = new ArrayList<List<Integer>>();
+        if (root == null) {
+            return rs;
+        }
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();
+        queue.offer(root);
+        int level = 1;
+        while (queue.size() > 0) {
+            int size = queue.size();
+            ArrayList<Integer> temp = new ArrayList<Integer>();
+            for (int i = 0; i < size; i++) {
+                TreeNode t = queue.poll();
+                if (level % 2 == 0) {
+                    temp.add(0, t.val);
+                } else {
+                    temp.add(t.val);
+                }
+                if (t.left != null) {
+                    queue.offer(t.left);
+                }
+                if (t.right != null) {
+                    queue.offer(t.right);
+                }
+            }
+            rs.add(temp);
+            level++;
+        }
+        return rs;
+    }
+}

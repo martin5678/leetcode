@@ -36,3 +36,34 @@ public class Solution {
 		
     }
 }
+
+
+================================
+
+
+public class Solution {
+    public List<Integer> getRow(int rowIndex) {
+        List<Integer> rs = new ArrayList<Integer>();
+        if (rowIndex < 0) {
+            return rs;
+        }
+        rs.add(1);
+        int before = 1;
+        for (int i = 0; i < rowIndex; i++) {
+            for (int j = 0; j <= i + 1; j++) {
+                if (j == 0) {
+                    continue;
+                }
+                if (j == i + 1) {
+                    rs.add(1);
+                    continue;
+                }
+                int t = rs.get(j);
+                rs.set(j, before + rs.get(j));
+                before = t;
+            }
+        }
+        return rs;
+    }
+}
+
