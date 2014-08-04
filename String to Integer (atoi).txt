@@ -57,3 +57,46 @@ public class Solution {
         return (a <= '9' && a >= '0') ? true : false;
     }
 }
+
+===============================================
+
+public class Solution {
+    public int atoi(String str) {
+        int index = 0;
+        while (index < str.length()) {
+            if (str.charAt(index) == ' ') {
+                index++;
+            } else {
+                break;
+            }
+        }
+        if (index == str.length()) {
+            return 0;
+        }
+        if (str.charAt(index) != '+' && str.charAt(index) != '-' 
+            && !isNumber(str.charAt(index))) {
+            return 0;
+        }
+        boolean isPositive = str.charAt(index) == '-' ? false : true;
+        long result = isNumber(str.charAt(index)) ? (long) (str.charAt(index) - '0') : 0;
+        index++;
+        while (index < str.length()) {
+            char c = str.charAt(index);
+            if (isNumber(c)) {
+                result = result * 10 + (c - '0');
+                if (result > Integer.MAX_VALUE) {
+                    return isPositive ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+                }
+            } else {
+                break;
+            }
+            index++;
+        }
+        
+        return isPositive ? (int) result : (int) (0 - result);
+    }
+    
+    private boolean isNumber(char c) {
+        return c >= '0' && c <= '9';
+    }
+}

@@ -88,3 +88,24 @@ public class Solution {
         }
     }
 }
+
+第二次写的明显好多了。。。
+
+public class Solution {
+    public void connect(TreeLinkNode root) {
+        if (root == null || root.left == null) {
+            return;
+        }
+        while (root.left != null) {
+            TreeLinkNode cur = root;
+            while (cur != null) {
+                cur.left.next = cur.right;
+                if (cur.next != null) {
+                    cur.right.next = cur.next.left;
+                }
+                cur = cur.next;
+            }
+            root = root.left;
+        }
+    }
+}

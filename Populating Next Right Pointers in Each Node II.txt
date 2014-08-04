@@ -64,3 +64,43 @@ public class Solution {
         }
     }
 }
+
+
+==================
+
+
+第二次写的
+
+public class Solution {
+    public void connect(TreeLinkNode root) {
+        if (root == null || root.left == null && root.right == null) {
+            return;
+        }
+        while (root != null) {
+            TreeLinkNode nextlevel = null;
+            TreeLinkNode pre = null;
+            while (root != null) {
+                if (root.left != null) {
+                    if (nextlevel == null) {
+                        nextlevel = root.left;
+                    }
+                    if (pre != null) {
+                        pre.next = root.left;
+                    }
+                    pre = root.left;
+                }
+                if (root.right != null) {
+                    if (nextlevel == null) {
+                        nextlevel = root.right;
+                    }
+                    if (pre != null) {
+                        pre.next = root.right;
+                    }
+                    pre = root.right;
+                }
+                root = root.next;
+            }
+            root = nextlevel;
+        }
+    }
+}

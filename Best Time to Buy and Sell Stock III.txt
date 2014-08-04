@@ -52,31 +52,28 @@ DP can have two ways to handle the version 1 problem, sell at day i and buy at d
 
 public class Solution {
     public int maxProfit(int[] prices) {
-        int n = prices.length;
-        if(n == 0) return 0;
-        int[] before = new int[n];
-        int[] after = new int[n];
-        int maxv = prices[n - 1];
-        int minv = prices[0];
-        int result = 0;
-        before[0] = 0;
-        after[n - 1] = 0;
-        for(int i = 1; i < n; i++){
-            minv = min(minv, prices[i]);
-            before[i] = max(before[i - 1], prices[i] - minv);
+        if (prices.length == 0) {
+            return 0;
         }
-        for(int i = n - 2; i >= 0; i--){
-            maxv = max(maxv, prices[i]);
-            after[i] = max(after[i + 1], maxv - prices[i]);
-            result = max(result, before[i] + after[i]);
+        int len = prices.length;
+        // max value sell stock at day i
+        int[] sell = new int[len];
+        sell[0] = 0;
+        // max value buy stock at day i
+        int[] buy = new int[len];
+        buy[len - 1] = 0;
+        int max = prices[len - 1];
+        int min = prices[0];
+        for (int i = 1; i < len; i++) {
+            min = Math.min(min, prices[i]);
+            sell[i] = Math.max(sell[i - 1], prices[i] - min);
+        }
+        int result = 0;
+        for (int i = len - 2; i >= 0; i--) {
+            max = Math.max(max, prices[i]);
+            buy[i] = Math.max(buy[i + 1], max - prices[i]);
+            result = Math.max(result, buy[i] + sell[i]);
         }
         return result;
-    }
-    
-    public int max(int a, int b){
-        return a > b ? a : b;
-    }
-    public int min(int a, int b){
-        return a > b ? b : a;
     }
 }
