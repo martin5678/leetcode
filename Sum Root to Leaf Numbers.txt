@@ -64,3 +64,26 @@ public class Solution {
         return helper(root.left, tsum) + helper(root.right, tsum);
     }
 }
+
+Solution 3 : 使用成员变量
+
+public class Solution {
+    private int total = 0;
+    public int sumNumbers(TreeNode root) {
+        helper(root, 0);
+        return total;
+    }
+    
+    private void helper(TreeNode root, int sum) {
+        if (root == null) {
+            return;
+        }
+        if (root.left == null && root.right == null) {
+            sum = sum * 10 + root.val;
+            total += sum;
+        }
+        sum = sum * 10 + root.val;
+        helper(root.left, sum);
+        helper(root.right, sum);
+    }
+}
