@@ -11,9 +11,9 @@ Given the following matrix:
 You should return [1,2,3,6,9,8,7,4,5].
 
 ------------------------------------
-¸Õ¿ªÊ¼ÄÃµİ¹éĞ´£¬µ«ÊÇ·¢ÏÖ¸÷ÖÖÇé¿öĞèÒª¿¼ÂÇ£¬»¹ÊÇÓÃÖ±½ÓÑ­»·À´Ğ´°É¡£Õâ¸öÌâÄ¿Ëã·¨ºÍÂß¼­¶¼²»ÄÑ£¬¾ÍÊÇÏÂ±ê´¦ÀíĞèÒª·Ç³£Ï¸ĞÄ¡£
+åˆšå¼€å§‹æ‹¿é€’å½’å†™ï¼Œä½†æ˜¯å‘ç°å„ç§æƒ…å†µéœ€è¦è€ƒè™‘ï¼Œè¿˜æ˜¯ç”¨ç›´æ¥å¾ªç¯æ¥å†™å§ã€‚è¿™ä¸ªé¢˜ç›®ç®—æ³•å’Œé€»è¾‘éƒ½ä¸éš¾ï¼Œå°±æ˜¯ä¸‹æ ‡å¤„ç†éœ€è¦éå¸¸ç»†å¿ƒã€‚
 
-Ò»²ãÒ»²ã°şÆ¤¡£
+ä¸€å±‚ä¸€å±‚å‰¥çš®ã€‚
 
 public class Solution {
     public List<Integer> spiralOrder(int[][] matrix) {
@@ -57,3 +57,37 @@ public class Solution {
     }
 }
 
+========================
+
+public class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> rs = new ArrayList<Integer>();
+        int row = matrix.length;
+        if (row == 0) {
+            return rs;
+        }
+        int col = matrix[0].length;
+        int maxLayer = (Math.min(row, col) + 1) / 2;
+        int layer = 0;
+        while (layer < maxLayer) {
+            for (int i = layer; i < col - layer; i++) {
+                rs.add(matrix[layer][i]);
+            }
+            for (int i = layer + 1; i < row - layer; i++) {
+                rs.add(matrix[i][col - layer - 1]);
+            }
+            if ((row - layer - 1) != layer) {
+                for (int i = col - layer - 2; i >= layer; i--) {
+                    rs.add(matrix[row - layer - 1][i]);
+                }   
+            }
+            if ((col - layer - 1) != layer) {
+                for (int i = row - layer - 2; i > layer; i--) {
+                    rs.add(matrix[i][layer]);
+                }                
+            }
+            layer++;
+        }
+        return rs;
+    }
+}
