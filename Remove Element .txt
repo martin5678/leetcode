@@ -50,3 +50,27 @@ public class Solution {
         return current;
     }
 }
+
+
+3 把这个元素全部移到末尾
+
+public class Solution {
+    public int removeElement(int[] A, int elem) {
+        int cur = A.length - 1;
+        for (int i = 0; i < A.length; i++) {
+            while (cur >= 0 && A[cur] == elem) {
+                cur--;
+            }
+            if (i >= cur) {
+                break;
+            }
+            if (A[i] == elem) {
+                int temp = A[cur];
+                A[cur] = A[i];
+                A[i] = temp;
+                cur--;
+            }
+        }
+        return cur + 1;
+    }
+}
