@@ -15,9 +15,9 @@ In this case, you should ignore redundant slashes and return "/home/foo".
 
 Notice : substring
 public String substring(int beginIndex,
-                        int endIndex)·µ»ØÒ»¸öĞÂ×Ö·û´®£¬ËüÊÇ´Ë×Ö·û´®µÄÒ»¸ö×Ó×Ö·û´®¡£¸Ã×Ó×Ö·û´®´ÓÖ¸¶¨µÄ beginIndex ´¦¿ªÊ¼£¬Ö±µ½Ë÷Òı endIndex - 1 ´¦µÄ×Ö·û¡£Òò´Ë£¬¸Ã×Ó×Ö·û´®µÄ³¤¶ÈÎª endIndex-beginIndex¡£ 
+                        int endIndex)è¿”å›ä¸€ä¸ªæ–°å­—ç¬¦ä¸²ï¼Œå®ƒæ˜¯æ­¤å­—ç¬¦ä¸²çš„ä¸€ä¸ªå­å­—ç¬¦ä¸²ã€‚è¯¥å­å­—ç¬¦ä¸²ä»æŒ‡å®šçš„ beginIndex å¤„å¼€å§‹ï¼Œç›´åˆ°ç´¢å¼• endIndex - 1 å¤„çš„å­—ç¬¦ã€‚å› æ­¤ï¼Œè¯¥å­å­—ç¬¦ä¸²çš„é•¿åº¦ä¸º endIndex-beginIndexã€‚ 
 
-ËùÒÔ×îºóÓÃµÄÊÇ result.length() - 1.
+æ‰€ä»¥æœ€åç”¨çš„æ˜¯ result.length() - 1.
 
 public class Solution {
     public String simplifyPath(String path) {
@@ -48,7 +48,7 @@ public class Solution {
 
 
 
-Èç¹û²»ÓÃsplit·½·¨
+å¦‚æœä¸ç”¨splitæ–¹æ³•
 
 
 
@@ -84,6 +84,46 @@ public class Solution {
             String t = strs.pop();
             sb.insert(0, t);
             sb.insert(0,"/");
+        }
+        return sb.toString();
+    }
+}
+
+
+=============================================
+
+
+public class Solution {
+    public String simplifyPath(String path) {
+        Stack<String> st = new Stack<String>();
+        int index = 0;
+        while (index < path.length()) {
+            if (path.charAt(index) == '/') {
+                index++;
+                continue;
+            }
+            int left = index;
+            while (index < path.length() && path.charAt(index) != '/') {
+                index++;
+            }
+            String sub = path.substring(left, index);
+            if (sub.equals(".")) {
+                continue;
+            } else if (sub.equals("..")) {
+                if (!st.isEmpty()) {
+                    st.pop();
+                }
+            } else {
+                st.push(sub);
+            }
+        }
+        if (st.size() == 0) {
+            return "/";
+        }
+        StringBuilder sb = new StringBuilder();
+        while (st.size() > 0) {
+            sb.insert(0, st.pop());
+            sb.insert(0, '/');
         }
         return sb.toString();
     }
