@@ -66,3 +66,46 @@ public class Solution {
         return length;
     }
 }
+
+
+
+
+--------------------------------------------------------------
+
+public class Solution {
+    public ListNode reverseKGroup(ListNode head, int k) {
+        int len = getLen(head);
+        if (len < k) {
+            return head;
+        }
+        int time = len / k;
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode pre = dummy;
+        for (int i = 1; i <= time; i++) {
+            ListNode newHead = null;
+            ListNode newPre = head;
+            for (int j = 1; j <= k; j++) {
+                ListNode temp = head.next;
+                head.next = newHead;
+                newHead = head;
+                head = temp;
+            }
+            pre.next = newHead;
+            pre = newPre;
+            if (i == time) {
+                pre.next = head;
+            }
+        }
+        return dummy.next;
+    }
+    
+    public int getLen(ListNode head) {
+        int len = 0;
+        while (head != null) {
+            head = head.next;
+            len++;
+        }
+        return len;
+    }
+}
