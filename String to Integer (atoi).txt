@@ -100,3 +100,34 @@ public class Solution {
         return c >= '0' && c <= '9';
     }
 }
+
+
+
+----------------------------
+
+public class Solution {
+    public int myAtoi(String str) {
+        String cur = str.trim();
+        long result = 0;
+        if (cur.length() == 0) {
+            return 0;
+        }
+        boolean positive = true;
+        int start = 0;
+        if (cur.charAt(0) == '+' || cur.charAt(0) == '-') {
+            positive = cur.charAt(0) == '+';
+            start += 1;
+        }
+        for (int i = start; i < cur.length(); i++) {
+            char temp = cur.charAt(i);
+            if (temp > '9' || temp < '0') {
+                break;
+            }
+            result = result * 10 + temp - '0';
+            if (result > Integer.MAX_VALUE) {
+                return positive ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+            }
+        }
+        return positive ? (int) result : (int) -result;
+    }
+}
