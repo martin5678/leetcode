@@ -32,7 +32,7 @@ public class Solution {
 
 Notice I use the break when j equals to the length, in C++ it does not need this code because C++ doesn't check the index of array out of bound.
 
-ע��ע�͵ĵط�һ��Ҫ�ǵá�
+注意注释的地方一定要记得。
 
 public class Solution {
     public int lengthOfLongestSubstring(String s) {
@@ -60,6 +60,33 @@ public class Solution {
             current++;
         }
         return maxlength;
+    }
+}
+
+
+=========================
+
+
+public class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        HashMap<Character, Integer> window = new HashMap<>();
+        int max = 0;
+        int left = 0;
+        for (int i = 0; i < s.length(); i++) {
+            char temp = s.charAt(i);
+            if (!window.containsKey(temp)) {
+                window.put(temp, i);
+                max = Math.max(max, i - left + 1);
+            } else {
+                int right = window.get(temp);
+                for (int j = left; j <= right; j++) {
+                    window.remove(s.charAt(j));
+                }
+                left = right + 1;
+                window.put(temp, i);
+            }
+        }
+        return max;
     }
 }
 
