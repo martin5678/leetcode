@@ -4,7 +4,7 @@ Compute and return the square root of x.
 
 ------------------------------------
 
-Note: ���ִ𰸷���
+Note: ¶þ·Ö´ð°¸·¨¡£
 
 solution:
 
@@ -52,3 +52,25 @@ public class Solution {
         return start > end ? end : start;
     }
 }
+
+
+--------------------
+
+ public int mySqrt(int x) {
+        if (x < 2) {
+            return x;
+        }
+        int high = x;
+        int low = 0;
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            if (x / mid == mid) {
+                return mid;
+            } else if (x / mid > mid) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+        return high;
+    }
