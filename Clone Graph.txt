@@ -24,56 +24,11 @@ Visually, the graph looks like the following:
 
 ------------------------------------------------
 
-ÏÈbfs»ñµÃËùÓĞ¶¥µã£¬È»ºóÏÈ¿ËÂ¡¶¥µãÔÙ¿ËÂ¡±ß¡£ µ±È»»¹ÓĞÓÅ»¯µÄ·½·¨ÊÇÁ½¸öÒ»Æğ¿ËÂ¡ÕâÑùÖ»ĞèÒª×ßÒ»±é¡£
-×¢ÒâÖØ¸´Â·¾¶ÎÊÌâ£¬ËùÒÔĞèÒªÒ»±ß±éÀúÒ»±ßÍùhashmapÀïÃæ·Å£¬ÕâÑù²Å²»»áµ¼ÖÂ·ÅÈëÖØ¸´½Úµã¡£
-
-
-
-/**
- * Definition for undirected graph.
- * class UndirectedGraphNode {
- *     int label;
- *     List<UndirectedGraphNode> neighbors;
- *     UndirectedGraphNode(int x) { label = x; neighbors = new ArrayList<UndirectedGraphNode>(); }
- * };
- */
-public class Solution {
-    public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
-        if (node == null) {
-            return null;
-        }
-        List<UndirectedGraphNode> allnodes = new ArrayList<UndirectedGraphNode>();
-        HashMap<UndirectedGraphNode, UndirectedGraphNode> relation = 
-            new HashMap<UndirectedGraphNode, UndirectedGraphNode>();
-        // BFS to clone nodes
-        allnodes.add(node);
-        relation.put(node, new UndirectedGraphNode(node.label));
-        int i = 0;
-        while (i < allnodes.size()) {
-            UndirectedGraphNode temp = allnodes.get(i++);
-            for (UndirectedGraphNode t : temp.neighbors) {
-                if (!relation.containsKey(t)) {
-                    allnodes.add(t);
-                    relation.put(t, new UndirectedGraphNode(t.label));    
-                }
-            }
-        }
-        // clone edge
-        for (UndirectedGraphNode t : allnodes) {
-            for (UndirectedGraphNode x : t.neighbors) {
-                relation.get(t).neighbors.add(relation.get(x));
-            }
-        }
-        return relation.get(node);
-    }
-}
-
-
-
-
+å…ˆbfsè·å¾—æ‰€æœ‰é¡¶ç‚¹ï¼Œç„¶åå…ˆå…‹éš†é¡¶ç‚¹å†å…‹éš†è¾¹ã€‚ å½“ç„¶è¿˜æœ‰ä¼˜åŒ–çš„æ–¹æ³•æ˜¯ä¸¤ä¸ªä¸€èµ·å…‹éš†è¿™æ ·åªéœ€è¦èµ°ä¸€éã€‚
+æ³¨æ„é‡å¤è·¯å¾„é—®é¢˜ï¼Œæ‰€ä»¥éœ€è¦ä¸€è¾¹éå†ä¸€è¾¹å¾€hashmapé‡Œé¢æ”¾ï¼Œè¿™æ ·æ‰ä¸ä¼šå¯¼è‡´æ”¾å…¥é‡å¤èŠ‚ç‚¹ã€‚
 
 -------------------------------------------------------
-Ö±½ÓÒ»²½Ìí¼ÓÍê³ÉÃ¿±éÀúÒ»¸öneighbor¾Í¸´ÖÆ¡£
+ç›´æ¥ä¸€æ­¥æ·»åŠ å®Œæˆæ¯éå†ä¸€ä¸ªneighborå°±å¤åˆ¶ã€‚
 
 public class Solution {
     public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
@@ -83,22 +38,47 @@ public class Solution {
         HashMap<UndirectedGraphNode, UndirectedGraphNode> hm = 
             new HashMap<UndirectedGraphNode, UndirectedGraphNode>();
         Queue<UndirectedGraphNode> bfs = new LinkedList<UndirectedGraphNode>();  
-        ArrayList<UndirectedGraphNode> allnodes = new ArrayList<UndirectedGraphNode>();
         // BFS to copy all the nodes
         bfs.offer(node);
-        allnodes.add(node);
         hm.put(node, new UndirectedGraphNode(node.label));
         while (bfs.size() > 0) {
             UndirectedGraphNode temp = bfs.poll();
             for (UndirectedGraphNode i : temp.neighbors) {
                 if (!hm.containsKey(i)) {
                     bfs.offer(i);
-                    allnodes.add(i);
                     hm.put(i, new UndirectedGraphNode(i.label));
                 }
                 hm.get(temp).neighbors.add(hm.get(i));
             }    
         }
         return hm.get(node);
+    }
+}
+
+
+----------------------
+
+dfs
+
+public class Solution {
+    public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
+        HashMap<UndirectedGraphNode, UndirectedGraphNode> map = new HashMap<>();
+        return copy(node, map);
+    }
+    
+    public UndirectedGraphNode copy(UndirectedGraphNode node,
+        HashMap<UndirectedGraphNode, UndirectedGraphNode> map) {
+        if (node == null) {
+            return null;
+        }
+        if (map.containsKey(node)) {
+            return map.get(node);
+        }
+        UndirectedGraphNode newNode = new UndirectedGraphNode(node.label);
+        map.put(node, newNode);
+        for (UndirectedGraphNode neighbor : node.neighbors) {
+            newNode.neighbors.add(copy(neighbor, map));
+        }
+        return newNode;
     }
 }
