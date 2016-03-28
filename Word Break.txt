@@ -9,18 +9,18 @@ Return true because "leetcode" can be segmented as "leet code".
 
 ---------------------------------------
 
-Ò»¸öDPÎÊÌâ¡£¶¨Òåpossible[i] ÎªS×Ö·û´®ÉÏ[0,i]µÄ×Ó´®ÊÇ·ñ¿ÉÒÔ±»segmented by dictionary.
+ä¸€ä¸ªDPé—®é¢˜ã€‚å®šä¹‰possible[i] ä¸ºSå­—ç¬¦ä¸²ä¸Š[0,i]çš„å­ä¸²æ˜¯å¦å¯ä»¥è¢«segmented by dictionary.
 
-ÄÇÃ´
+é‚£ä¹ˆ
 
-possible[i] = true      if  S[0,i]ÔÚdictionaryÀïÃæ
+possible[i] = true      if  S[0,i]åœ¨dictionaryé‡Œé¢
 
-                = true      if   possible[k] == true ²¢ÇÒ S[k+1,j]ÔÚdictionaryÀïÃæ£¬ 0<k<i
+                = true      if   possible[k] == true å¹¶ä¸” S[k+1,j]åœ¨dictionaryé‡Œé¢ï¼Œ 0<k<i
 
                = false      if    no such k exist.
 
  
-×¢ÒâÔÚµÚÒ»¸öÑ­»·Ê±ÒªÅĞ¶Ï´Ó0 - i ÊÇ²»ÊÇÖ±½ÓÔÚ×ÖµäÀï¡£ ÎÒµÚ¶ş´ÎĞ´µÄ³ÌĞòÃ÷ÏÔ±ÈµÚÒ»´ÎÓÅ»¯£¬ÒòÎªÖ±½Ó¼õµôÁË²»±ØÒªµÄÖ¦¡£
+æ³¨æ„åœ¨ç¬¬ä¸€ä¸ªå¾ªç¯æ—¶è¦åˆ¤æ–­ä»0 - i æ˜¯ä¸æ˜¯ç›´æ¥åœ¨å­—å…¸é‡Œã€‚ æˆ‘ç¬¬äºŒæ¬¡å†™çš„ç¨‹åºæ˜æ˜¾æ¯”ç¬¬ä¸€æ¬¡ä¼˜åŒ–ï¼Œå› ä¸ºç›´æ¥å‡æ‰äº†ä¸å¿…è¦çš„æã€‚
 
 
 public class Solution {
@@ -74,5 +74,26 @@ public class Solution {
             }
         }
         return dp[s.length() - 1];
+    }
+}
+
+
+--------------------------------
+
+public class Solution {
+    public boolean wordBreak(String s, Set<String> wordDict) {
+        boolean[] dp = new boolean[s.length() + 1];
+        dp[0] = true;
+        for (int i = 1; i < dp.length; i++) {
+            for (int j = 0; j < i; j++) {
+                if (dp[j] == true) {
+                    if (wordDict.contains(s.substring(j, i))) {
+                        dp[i] = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return dp[dp.length - 1];
     }
 }
