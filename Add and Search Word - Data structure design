@@ -1,0 +1,85 @@
+Design a data structure that supports the following two operations:
+
+void addWord(word)
+bool search(word)
+search(word) can search a literal word or a regular expression string containing only letters a-z or .. A . means it can represent any one letter.
+
+For example:
+
+addWord("bad")
+addWord("dad")
+addWord("mad")
+search("pad") -> false
+search("bad") -> true
+search(".ad") -> true
+search("b..") -> true
+Note:
+You may assume that all words are consist of lowercase letters a-z.
+
+
+=========================
+
+
+public class WordDictionary {
+    class TrieNode {
+        char val;
+        boolean isLeaf;
+        HashMap<Character, TrieNode> next;
+        public TrieNode(char c) {
+            this.val = c;
+            this.isLeaf = false;
+            this.next = new HashMap<>();
+        }
+    }
+    
+    private TrieNode root;
+
+    public WordDictionary() {
+        root = new TrieNode('a');
+    }
+    
+    // Adds a word into the data structure.
+    public void addWord(String word) {
+        TrieNode cur = this.root;
+        for (int i = 0; i < word.length(); i++) {
+            char c = word.charAt(i);
+            if (!cur.next.containsKey(c)) {
+                TrieNode newNode = new TrieNode(c);
+                cur.next.put(c, newNode);
+            }
+            if (i == word.length() - 1) {
+                cur.next.get(c).isLeaf = true;
+            }
+            cur = cur.next.get(c);
+        }
+    }
+
+    // Returns if the word is in the data structure. A word could
+    // contain the dot character '.' to represent any one letter.
+    public boolean search(String word) {
+        return backtrack(word, root, 0);
+    }
+
+    private boolean backtrack(String word, TrieNode node, int pos) {
+        if (pos == word.length()) {
+            return node.isLeaf;
+        }
+        for (int i = pos; i < word.length(); i++) {
+            char c = word.charAt(i);
+            if (c == '.') {
+                for (TrieNode n : node.next.values()) {
+                    if (backtrack(word, n, i + 1)) {
+                        return true;
+                    }
+                }
+                return false;
+            } else {
+                if (!node.next.containsKey(c)) {
+                    return false;
+                }
+                node = node.next.get(c);
+            }
+        }
+        return node.isLeaf;
+    }    
+}
