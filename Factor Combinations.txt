@@ -1,0 +1,100 @@
+Numbers can be regarded as product of its factors. For example,
+
+8 = 2 x 2 x 2;
+  = 2 x 4.
+Write a function that takes an integer n and return all possible combinations of its factors.
+
+Note: 
+You may assume that n is always positive.
+Factors should be greater than 1 and less than n.
+Examples: 
+input: 1
+output: 
+[]
+input: 37
+output: 
+[]
+input: 12
+output:
+[
+  [2, 6],
+  [2, 2, 3],
+  [3, 4]
+]
+input: 32
+output:
+[
+  [2, 16],
+  [2, 2, 8],
+  [2, 2, 2, 4],
+  [2, 2, 2, 2, 2],
+  [2, 4, 4],
+  [4, 8]
+]
+
+
+=================================
+第一次优化有一些剪枝
+
+public class Solution {
+    public List<List<Integer>> getFactors(int n) {
+        List<List<Integer>> rs = new ArrayList<>();
+        if (n == 1) {
+            return rs;
+        }
+        List<Integer> temp = new ArrayList<>();
+        helper(temp, rs, n, n, 2);
+        return rs;
+    }
+    
+    public void helper(List<Integer> temp, List<List<Integer>> rs, int n, int cur, int pos) {
+        if (cur == 1) {
+            rs.add(new ArrayList<Integer>(temp));
+            return;
+        }
+        
+        for (int i = pos; i <= n / 2; i++) {
+            if (i > cur) {
+                break;
+            }
+            if (cur % i == 0) {
+                temp.add(i);
+                helper(temp, rs, n, cur / i, i);
+                temp.remove(temp.size() - 1);
+            }
+        }
+    }
+}
+
+
+
+更多的剪枝，其实只要sqrt(n)之前就够了 
+
+
+public class Solution {
+    public List<List<Integer>> getFactors(int n) {
+        List<List<Integer>> rs = new ArrayList<>();
+        if (n == 1) {
+            return rs;
+        }
+        List<Integer> temp = new ArrayList<>();
+        helper(temp, rs, n, -1);
+        return rs;
+    }
+    
+    public void helper(List<Integer> temp, List<List<Integer>> rs, int cur, int pos) {
+        if (pos != -1) {
+            temp.add(cur);
+            rs.add(new ArrayList<Integer>(temp));
+            temp.remove(temp.size() - 1);
+        }
+        
+        for (int i = Math.max(pos, 2); i <= Math.sqrt(cur); i++) {
+            if (cur % i == 0) {
+                temp.add(i);
+                helper(temp, rs, cur / i, i);
+                temp.remove(temp.size() - 1);
+            }
+        }
+    }
+}
