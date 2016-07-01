@@ -3,54 +3,10 @@ Given n points on a 2D plane, find the maximum number of points that lie on the 
 
 ------------------------------
 
-����ÿһ���㶼����֮����������֮�����ɵ�ֱ�ߵ�б�ʣ�Ȼ����б��ΪKEYͳ�����еĵ�������Java������Double����Float��key Ҫ�м���ע��㣬 ���������������һ��ֱ���ϣ���������б�������������Ϊͬһ��ֵ��Double��Float�� 0.0 ��= -0.0 ������Ҫ�������������������Ҫ�ǵô����ظ����ֵĵ㡣 ����һ�����ɾ��Ƕ�ÿ����ֻȥ��������ĵ�Աȶ�����Ҫһһ�Ա���Ϊͬһֱ�ߵ����ֵ�϶���ǰ������ˡ���Ȼʱ�临�Ӷ�û�б仯��������Ȼ��Ч��֦�ˡ�
+对于每一个点都求它之后各个点跟他之间的组成的直线的斜率，然后以斜率为KEY统计所有的点数量。Java里面拿Double或者Float做key 要有几个注意点， 负无穷和正无穷在一个直线上，所以碰到斜率是无穷最好置为同一个值。Double和Float的 0.0 ！= -0.0 所以需要处理这个情况。另外就是要记得处理重复出现的点。 还有一个技巧就是对每个点只去跟它后面的点对比而不需要一一对比因为同一直线的最大值肯定在前面就求到了。虽然时间复杂度没有变化，但是依然有效剪枝了。
 
 
 
-/**
- * Definition for a point.
- * class Point {
- *     int x;
- *     int y;
- *     Point() { x = 0; y = 0; }
- *     Point(int a, int b) { x = a; y = b; }
- * }
- */
-public class Solution {
-    public int maxPoints(Point[] points) {
-        if (points.length == 0 || points == null) {
-            return 0;
-        }
-        HashMap<Double, Integer> hm = new HashMap<Double, Integer>();
-        int max = 1;
-        for (int i = 0; i < points.length; i++) {
-            hm.clear();
-            hm.put(Double.POSITIVE_INFINITY, 1);
-            int dup = 0;
-            for (int j = i + 1; j < points.length; j++) {
-                if (points[j].x == points[i].x && points[j].y == points[i].y) {
-                    dup++;
-                    continue;
-                }
-                // positive infinity and negative infinity is on the same lie
-                // For Double and Float +0.0 != -0.0, but for double and float
-                // they are equal.
-                Double key = points[i].x - points[j].x == 0 ? 
-                    Double.POSITIVE_INFINITY : 
-                    0.0 + (double)(points[j].y - points[i].y) / (double)(points[j].x - points[i].x);
-                if (hm.containsKey(key)) {
-                    hm.put(key, hm.get(key) + 1);
-                } else {
-                    hm.put(key, 2);
-                }  
-            }
-            for (int a : hm.values()) {
-                max = Math.max(max, a + dup);
-            }
-        }
-        return max;
-    }
-}
 
 
 
@@ -90,5 +46,68 @@ public class Solution {
             }
         }
         return max;
+    }
+}
+
+
+
+用最大公约数来做这样可以避免double做key的问题。
+
+public class Solution {
+    
+    public int maxPoints(Point[] points) {
+        if (points.length == 0) {
+            return 0;
+        }
+        HashMap<String, Integer> map = new HashMap<>();
+        int max = 1;
+        for (int i = 0; i < points.length; i++) {
+            map.clear();
+            int dup = 0;
+            for (int j = i + 1; j < points.length; j++) {
+                if (points[i].x == points[j].x && points[i].y == points[j].y) {
+                    dup++;
+                    continue;
+                }
+                int xDiff = points[i].x - points[j].x;
+                int yDiff = points[i].y - points[j].y;
+                String key;
+                if (xDiff == 0 || yDiff == 0) {
+                    key = getKey(xDiff, yDiff);
+                } else {
+                    int gcd = getGCD(xDiff, yDiff);
+                    xDiff /= gcd;
+                    yDiff /= gcd;
+                    key = getKey(xDiff, yDiff);
+                }
+                if (map.containsKey(key)) {
+                    map.put(key, map.get(key) + 1);
+                } else {
+                    map.put(key, 2);
+                }
+            }
+            max = Math.max(max, dup + 1);
+            for (int amount : map.values()) {
+                max = Math.max(max, amount + dup);
+            }
+        }
+        return max;
+    }
+    
+    public int getGCD(int x, int y) {
+        if (y == 0) {
+            return x;
+        }
+        return getGCD(y, x % y);
+    }
+    
+    public String getKey(int x, int y) {
+        if (x == 0) {
+            return "INF";
+        }
+        if (y == 0) {
+            return "0";
+        }
+        return x + "+" + y;
     }
 }
