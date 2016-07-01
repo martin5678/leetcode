@@ -47,3 +47,31 @@ public class Solution {
         return positive == true ? answer : 1 / answer;
     }    
 }
+
+
+
+
+=========
+
+避免overflow
+
+public class Solution {
+    public double myPow(double x, int n) {
+        if (n == 0) {
+            return 1;
+        }
+        if (n == 1) {
+            return x;
+        }
+        boolean neg = false;
+        long k = n;
+        if (n < 0) {
+            neg = true;
+            k *= -1;
+        }
+        boolean even = k % 2 == 0;
+        k /= 2;
+        double answer = even ? myPow(x * x, (int) k) : myPow(x * x, (int) k) * x;
+        return neg ? 1 / answer : answer;
+    }
+}
