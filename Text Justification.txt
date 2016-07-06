@@ -1,0 +1,81 @@
+Given an array of words and a length L, format the text such that each line has exactly L characters and is fully (left and right) justified.
+
+You should pack your words in a greedy approach; that is, pack as many words as you can in each line. Pad extra spaces ' ' when necessary so that each line has exactly L characters.
+
+Extra spaces between words should be distributed as evenly as possible. If the number of spaces on a line do not divide evenly between words, the empty slots on the left will be assigned more spaces than the slots on the right.
+
+For the last line of text, it should be left justified and no extra space is inserted between words.
+
+For example,
+words: ["This", "is", "an", "example", "of", "text", "justification."]
+L: 16.
+
+Return the formatted lines as:
+[
+   "This    is    an",
+   "example  of text",
+   "justification.  "
+]
+Note: Each word is guaranteed not to exceed L in length.
+
+click to show corner cases.
+
+Corner Cases:
+A line other than the last line might contain only one word. What should you do in this case?
+In this case, that line should be left-justified.
+
+
+=====================================
+
+public class Solution {
+    public List<String> fullJustify(String[] words, int maxWidth) {
+        List<String> rs = new ArrayList<>();
+        int index = 0;
+        while (index < words.length) {
+            int count = 0;
+            int j = index;
+            int wordTotalLength = 0;
+            boolean leftJustify = false;
+            while (j < words.length && wordTotalLength + words[j].length() + count <= maxWidth) {
+                wordTotalLength += words[j].length();
+                count++;
+                j++;
+            }
+            if (count == 1 || j == words.length) {
+                leftJustify = true;
+            }
+            StringBuilder sb = new StringBuilder();
+            if (leftJustify) {
+                int spaceInterval = 1;
+                int spaceLeft = maxWidth - wordTotalLength - count + 1;
+                for (int i = index; i < j; i++) {
+                    sb.append(words[i]);
+                    if (i != j - 1) {
+                        sb.append(' ');
+                    }
+                } 
+                while (spaceLeft-- > 0) {
+                    sb.append(' ');
+                }
+            } else {
+                int spaceInterval = (maxWidth - wordTotalLength) / (count - 1);
+                int spaceLeft = (maxWidth - wordTotalLength) % (count - 1);
+                for (int i = index; i < j; i++) {
+                    sb.append(words[i]);
+                    if (i != j - 1) {
+                        for (int space = 0; space < spaceInterval; space++) {
+                            sb.append(' ');
+                        }
+                        if (spaceLeft-- > 0) {
+                            sb.append(' ');
+                        }                        
+                    }
+
+                }
+            }
+            rs.add(sb.toString());
+            index = j;
+        }
+        return rs;
+    }
+}
