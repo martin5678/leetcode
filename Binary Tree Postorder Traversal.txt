@@ -13,13 +13,13 @@ Note: Recursive solution is trivial, could you do it iteratively?
 
 -------------------------------
 
-µİ¹é¾Í²»Ğ´ÁË£¬ Ì«¼òµ¥ÁË¡£·Çµİ¹éµÄË¼Â·£º
+é€’å½’å°±ä¸å†™äº†ï¼Œ å¤ªç®€å•äº†ã€‚éé€’å½’çš„æ€è·¯ï¼š
 
-     * ³ıÁË×î×óµÄÒ»¸ö×ó×Ó½áµã£¬°ÑËùÓĞµÄ×ó×Ó½áµãÏà¼ÌÈëÕ»£¨ÊÇÒ»¸öÑ­»·¹ı³Ì£© 
-     * ÕâÊ±pÖ¸Ïò×î×óµÄÄÇ¸ö×ó×Ó½áµã£¬ 
-     * ÖØ¸´£ºÈôpÃ»ÓĞÓÒ×Ó½áµã£¨»òÕßpµÄÓÒ×Ó½áµãÒÑ¾­Êä³ö£©£¬ÔòÊä³öp£¬Í¬Ê±³öÕ»£¬½«Öµ¸³¸øp 
-     * ÈôpÓĞÓÒ×Ó½áµã£¬Ôò½«pÈëÕ»£¬Í¬Ê±pÖ¸ÏòÆäÓÒ×Ó½áµã 
-     * ÖØ¸´ÒÔÉÏ²½Öè£¬Ö±µ½pÎª¿Õ 
+     * é™¤äº†æœ€å·¦çš„ä¸€ä¸ªå·¦å­ç»“ç‚¹ï¼ŒæŠŠæ‰€æœ‰çš„å·¦å­ç»“ç‚¹ç›¸ç»§å…¥æ ˆï¼ˆæ˜¯ä¸€ä¸ªå¾ªç¯è¿‡ç¨‹ï¼‰ 
+     * è¿™æ—¶pæŒ‡å‘æœ€å·¦çš„é‚£ä¸ªå·¦å­ç»“ç‚¹ï¼Œ 
+     * é‡å¤ï¼šè‹¥pæ²¡æœ‰å³å­ç»“ç‚¹ï¼ˆæˆ–è€…pçš„å³å­ç»“ç‚¹å·²ç»è¾“å‡ºï¼‰ï¼Œåˆ™è¾“å‡ºpï¼ŒåŒæ—¶å‡ºæ ˆï¼Œå°†å€¼èµ‹ç»™p 
+     * è‹¥pæœ‰å³å­ç»“ç‚¹ï¼Œåˆ™å°†på…¥æ ˆï¼ŒåŒæ—¶pæŒ‡å‘å…¶å³å­ç»“ç‚¹ 
+     * é‡å¤ä»¥ä¸Šæ­¥éª¤ï¼Œç›´åˆ°pä¸ºç©º 
 
 
 public class Solution {
@@ -48,3 +48,28 @@ public class Solution {
     }
 }
 
+
+=========================
+
+public class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> rs = new ArrayList<>();
+        Stack<TreeNode> st = new Stack<>();
+        TreeNode pre = null;
+        while (root != null || st.size() > 0) {
+            while (root != null) {
+                st.push(root);
+                root = root.left;
+            }
+            TreeNode cur = st.peek();
+            if (cur.right == null || cur.right == pre) {
+                rs.add(cur.val);
+                st.pop();
+                pre = cur;
+            } else {
+                root = cur.right;
+            }
+        }
+        return rs;
+    }
+}
